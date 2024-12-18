@@ -2,13 +2,12 @@ package shop.ninescent.mall.qna.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import shop.ninescent.mall.qna.dto.QnaRequestDTO;
 import shop.ninescent.mall.qna.dto.QnaResponseDTO;
 import shop.ninescent.mall.qna.service.QnaService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/qna")
@@ -21,5 +20,11 @@ public class QnaBoardController {
     public ResponseEntity<QnaResponseDTO> createQna(@RequestBody QnaRequestDTO qnaRequestDTO) {
         QnaResponseDTO responseDTO = qnaService.createQna(qnaRequestDTO);
         return ResponseEntity.ok(responseDTO);
+    }
+
+    @GetMapping("/{itemId}")
+    public ResponseEntity<List<QnaResponseDTO>> findQnaByItemId(@PathVariable Long itemId) {
+        List<QnaResponseDTO> responseDTOList = qnaService.findQnaByItemId(itemId);
+        return ResponseEntity.ok(responseDTOList);
     }
 }

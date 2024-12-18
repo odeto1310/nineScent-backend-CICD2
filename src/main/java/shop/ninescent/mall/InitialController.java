@@ -1,4 +1,4 @@
-package shop.ninescent;
+package shop.ninescent.mall;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

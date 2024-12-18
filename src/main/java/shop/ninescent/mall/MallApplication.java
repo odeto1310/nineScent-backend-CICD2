@@ -1,4 +1,4 @@
-package shop.ninescent;
+package shop.ninescent.mall;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
