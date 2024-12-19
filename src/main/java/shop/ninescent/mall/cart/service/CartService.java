@@ -1,10 +1,10 @@
-package shop.ninescent.cart.service;
+package shop.ninescent.mall.cart.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import shop.ninescent.cart.domain.CartItem;
-import shop.ninescent.cart.repository.CartRepository;
+import shop.ninescent.mall.cart.domain.CartItem;
+import shop.ninescent.mall.cart.repository.CartRepository;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package shop.ninescent.mall.qna.entity;
+package shop.ninescent.mall.qna.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

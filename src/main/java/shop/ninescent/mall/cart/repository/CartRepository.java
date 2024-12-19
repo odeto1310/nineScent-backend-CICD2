@@ -1,8 +1,8 @@
-package shop.ninescent.cart.repository;
+package shop.ninescent.mall.cart.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import shop.ninescent.cart.domain.CartItem;
+import shop.ninescent.mall.cart.domain.CartItem;
 
 import java.util.List;
 

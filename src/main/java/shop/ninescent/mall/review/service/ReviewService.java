@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import shop.ninescent.mall.review.dto.ReviewRequestDTO;
 import shop.ninescent.mall.review.dto.ReviewResponseDTO;
-import shop.ninescent.mall.review.entity.Review;
+import shop.ninescent.mall.review.domain.Review;
 import shop.ninescent.mall.review.repository.ReviewRepository;
 
 import java.time.LocalDateTime;
@@ -33,6 +33,12 @@ public class ReviewService {
 
     public List<ReviewResponseDTO> findReviewByItemId(Long itemId) {
         return reviewRepository.findByItemId(itemId).stream()
+                .map(this::toResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<ReviewResponseDTO> findReviewByUserNo(Long userNo) {
+        return reviewRepository.findByUserNo(userNo).stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }

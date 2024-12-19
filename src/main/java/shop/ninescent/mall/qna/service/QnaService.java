@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import shop.ninescent.mall.qna.dto.QnaRequestDTO;
 import shop.ninescent.mall.qna.dto.QnaResponseDTO;
-import shop.ninescent.mall.qna.entity.QnaBoard;
+import shop.ninescent.mall.qna.domain.QnaBoard;
 import shop.ninescent.mall.qna.repository.QnaBoardRepository;
 
 import java.time.LocalDateTime;
@@ -34,6 +34,12 @@ public class QnaService {
 
     public List<QnaResponseDTO> findQnaByItemId(Long itemId) {
         return qnaBoardRepository.findByItemId(itemId).stream()
+                .map(this::toResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<QnaResponseDTO> findQnaByUserNo(Long userNo) {
+        return qnaBoardRepository.findByUserNo(userNo).stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }

@@ -22,9 +22,15 @@ public class QnaBoardController {
         return ResponseEntity.ok(responseDTO);
     }
 
-    @GetMapping("/{itemId}")
+    @GetMapping("/item/{itemId}")
     public ResponseEntity<List<QnaResponseDTO>> findQnaByItemId(@PathVariable Long itemId) {
         List<QnaResponseDTO> responseDTOList = qnaService.findQnaByItemId(itemId);
+        return ResponseEntity.ok(responseDTOList);
+    }
+
+    @GetMapping("/user/{userNo}")
+    public ResponseEntity<List<QnaResponseDTO>> findQnaByUserNo(@PathVariable Long userNo) {
+        List<QnaResponseDTO> responseDTOList = qnaService.findQnaByUserNo(userNo);
         return ResponseEntity.ok(responseDTOList);
     }
 }

@@ -1,7 +1,7 @@
 package shop.ninescent.mall.review.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import shop.ninescent.mall.review.entity.Review;
+import shop.ninescent.mall.review.domain.Review;
 
 import java.util.List;
 
