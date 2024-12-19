@@ -1,4 +1,4 @@
-package shop.ninescent.mall.review.entity;
+package shop.ninescent.mall.review.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

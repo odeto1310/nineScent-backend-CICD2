@@ -22,9 +22,15 @@ public class ReviewController {
         return ResponseEntity.ok(responseDTO);
     }
 
-    @GetMapping("/{itemId}")
+    @GetMapping("/item/{itemId}")
     public ResponseEntity<List<ReviewResponseDTO>> findReviewByItemId(@PathVariable Long itemId) {
         List<ReviewResponseDTO> responseDTOList = reviewService.findReviewByItemId(itemId);
+        return ResponseEntity.ok(responseDTOList);
+    }
+
+    @GetMapping("/user/{userNo}")
+    public ResponseEntity<List<ReviewResponseDTO>> findReviewByUserNo(@PathVariable Long userNo) {
+        List<ReviewResponseDTO> responseDTOList = reviewService.findReviewByUserNo(userNo);
         return ResponseEntity.ok(responseDTOList);
     }
 }
