@@ -22,7 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         // User 엔티티를 Spring Security의 UserDetails로 변환하여 반환
         return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getUser_id()) // Spring Security의 username 필드에 매핑
+                .username(user.getUserId()) // Spring Security의 username 필드에 매핑
                 .password(user.getPassword()) // Spring Security의 password 필드에 매핑
                 .roles(user.getRole().name()) // 사용자 권한 (Enum -> String 변환)
                 .build();

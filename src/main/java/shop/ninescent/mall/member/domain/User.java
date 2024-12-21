@@ -47,6 +47,7 @@ public class User {
     }
 
     // 소셜 계정 연결 정보를 별도로 관리
+    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SocialAccount> socialAccounts = new ArrayList<>();
 

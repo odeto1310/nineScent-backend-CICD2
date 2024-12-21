@@ -8,16 +8,16 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     // user_id로 사용자 조회
-    Optional<User> findByUserId(String user_id);
+    Optional<User> findByUserId(String userId);
 
     // email로 사용자 조회
     Optional<User> findByEmail(String email);
 
     // provider와 provider_id로 소셜 계정 조회
-    Optional<User> findByProviderAndProviderId(String provider, String provider_id);
+//    Optional<User> findByProviderAndProviderId(String provider, String providerId);
 
     // user_id 중복 여부 확인
-    boolean existsByUserId(String user_id);
+    boolean existsByUserId(String userId);
 
     // email 중복 여부 확인
     boolean existsByEmail(String email);
