@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import shop.ninescent.mall.qna.dto.QnaRequestDTO;
 import shop.ninescent.mall.qna.dto.QnaResponseDTO;
 import shop.ninescent.mall.qna.domain.QnaBoard;
+import shop.ninescent.mall.qna.dto.UpdateQnaRequestDTO;
 import shop.ninescent.mall.qna.repository.QnaBoardRepository;
 
 import java.time.LocalDateTime;
@@ -42,6 +43,25 @@ public class QnaService {
         return qnaBoardRepository.findByUserNo(userNo).stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
+    }
+
+    public QnaResponseDTO updateQna(Long questionId, UpdateQnaRequestDTO updateDTO) {
+        QnaBoard qnaBoard = qnaBoardRepository.findById(questionId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 QnA가 존재하지 않습니다."));
+
+        qnaBoard.setQnaCategory(updateDTO.getQnaCategory());
+        qnaBoard.setContent(updateDTO.getContent());
+        qnaBoard.setAttachment(updateDTO.getAttachment());
+
+        QnaBoard updatedQnaBoard = qnaBoardRepository.save(qnaBoard);
+        return toResponseDTO(updatedQnaBoard);
+    }
+
+    public void deleteQna(Long questionId) {
+        QnaBoard qnaBoard = qnaBoardRepository.findById(questionId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 QnA가 존재하지 않습니다"));
+
+        qnaBoardRepository.delete(qnaBoard);
     }
 
     private QnaResponseDTO toResponseDTO(QnaBoard qnaBoard) {

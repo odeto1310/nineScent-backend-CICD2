@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import shop.ninescent.mall.review.dto.ReviewRequestDTO;
 import shop.ninescent.mall.review.dto.ReviewResponseDTO;
 import shop.ninescent.mall.review.domain.Review;
+import shop.ninescent.mall.review.dto.UpdateReviewRequestDTO;
 import shop.ninescent.mall.review.repository.ReviewRepository;
 
 import java.time.LocalDateTime;
@@ -41,6 +42,25 @@ public class ReviewService {
         return reviewRepository.findByUserNo(userNo).stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
+    }
+
+    public ReviewResponseDTO updateReview(Long reviewId, UpdateReviewRequestDTO updateDTO) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 존재하지 않습니다."));
+
+        review.setRating(updateDTO.getRating());
+        review.setContent(updateDTO.getContent());
+        review.setReviewImage(updateDTO.getReviewImage());
+
+        Review updatedReview = reviewRepository.save(review);
+        return toResponseDTO(updatedReview);
+    }
+
+    public void deleteReview(Long reviewId) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 QnA가 존재하지 않습니다"));
+
+        reviewRepository.delete(review);
     }
 
     private ReviewResponseDTO toResponseDTO(Review review) {
