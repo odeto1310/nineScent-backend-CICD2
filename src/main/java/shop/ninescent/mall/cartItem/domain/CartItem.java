@@ -1,4 +1,4 @@
-package shop.ninescent.cartItem.domain;
+package shop.ninescent.mall.cartItem.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
