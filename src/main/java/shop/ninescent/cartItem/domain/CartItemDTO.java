@@ -1,4 +1,4 @@
-package shop.ninescent.mall.cartItem.domain;
+package shop.ninescent.cartItem.domain;
 
 import lombok.Data;
 
