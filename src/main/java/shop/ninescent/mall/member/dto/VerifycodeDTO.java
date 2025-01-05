@@ -9,7 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserLoginRequestDTO {
-    private String userId; // 사용자 ID
-    private String password; // 비밀번호
+public class VerifycodeDTO {
+    private Long member_id;
+    private String code;
+    private String name;
+    private String username;
+    private String email;
+
 }

@@ -76,4 +76,14 @@ public class JwtTokenProvider {
     public Authentication getAuthentication(String username) {
         return new UsernamePasswordAuthenticationToken(username, null, null);
     }
+
+    // 토큰에서 역할 정보 추출
+    public String extractRole(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(secretKey.getBytes())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.get("role", String.class);
+    }
 }

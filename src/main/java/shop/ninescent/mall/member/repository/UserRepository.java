@@ -11,7 +11,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUserId(String userId);
 
     // email로 사용자 조회
-    Optional<User> findByEmail(String email);
+    Optional<User> findByEmail(String name);
+
+    //이름이랑 email로 사용자 조회
+    Optional<User> findByNameAndEmail(String name, String email);
+
 
     // provider와 provider_id로 소셜 계정 조회
 //    Optional<User> findByProviderAndProviderId(String provider, String providerId);
@@ -21,4 +25,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // email 중복 여부 확인
     boolean existsByEmail(String email);
+
+    //userid, email로 유저 찾기
+    boolean existsByUserIdAndEmail(String username, String email);
+
+    // userId로 사용자 삭제
+    void deleteByUserId(String userId);
+
 }

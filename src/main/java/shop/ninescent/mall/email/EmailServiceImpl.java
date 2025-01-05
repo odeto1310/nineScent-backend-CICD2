@@ -8,6 +8,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -19,19 +20,24 @@ public class EmailServiceImpl implements EmailService {
     // 인증 코드 생성
     @Override
     public String generateVerificationCode() {
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        StringBuilder code = new StringBuilder(6);
-        for (int i = 0; i < 6; i++) {
-            code.append(characters.charAt(random.nextInt(characters.length())));
-        }
-        return code.toString();
+        Random random = new Random();
+        int verificationCode = 100000 + random.nextInt(900000);
+        return String.valueOf(verificationCode);
     }
 
     // 인증 코드 이메일 전송
     @Override
     public void sendVerificationCode(String toEmail, String verificationCode) {
-        String subject = "Ninescent Mall 인증 코드";
-        String content = "<p>인증 코드입니다:</p><h3>" + verificationCode + "</h3>";
+        String subject = "\uD83D\uDCEC FINmate - 이메일 인증코드";
+        String content = "<html>" +
+                "<head><style>h1, h2 { color: navy; } p { font-size: 16px; }</style></head>" +
+                "<body>" +
+
+                "<header><h1>FINmate</h1></header>" +
+                "<section><p>아래 인증코드를 입력해 주세요:</p><h2>" + verificationCode + "</h2></section>" +
+                "<footer></footer>" +
+                "</body></html>";
+
         sendEmail(toEmail, subject, content);
     }
 
@@ -39,8 +45,15 @@ public class EmailServiceImpl implements EmailService {
     // 임시 비밀번호 이메일 전송
     @Override
     public void sendTempPasswordEmail(String toEmail, String temporaryPassword) {
-        String subject = "Ninescent Mall 임시 비밀번호";
-        String content = "<p>임시 비밀번호입니다. 로그인 후 비밀번호를 변경하세요:</p><h3>" + temporaryPassword + "</h3>";
+        String subject = "\uD83D\uDCED Ninescent Mall 임시 비밀번호";
+        String content = "<html>" +
+                "<head><style>h1, h2 { color: navy; } p { font-size: 16px; }</style></head>" +
+                "<body>" +
+                "<header><div><h1>FINmate</h1><div></header>" +
+                "<section><p>아래 임시 비밀번호를 사용해 로그인해 주세요:</p><h2>" + temporaryPassword + "</h2></section>" +
+                "<footer><div></div></footer>" +
+                "</body></html>";
+
         sendEmail(toEmail, subject, content);
     }
 

@@ -1,4 +1,11 @@
 package shop.ninescent.mall.member.service;
 
-public class SocialService {
+import shop.ninescent.mall.member.dto.*;
+
+import java.util.Map;
+
+public interface SocialService {
+
+
+
 }
