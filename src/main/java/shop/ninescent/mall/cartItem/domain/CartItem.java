@@ -1,4 +1,4 @@
-package shop.ninescent.mall.cart.domain;
+package shop.ninescent.mall.cartItem.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @Data
 @Table(name="cart_item")
 public class CartItem {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cartItemId;
@@ -23,5 +22,4 @@ public class CartItem {
     private Integer quantity;
     @Column(nullable = false)
     private LocalDateTime createdDate = LocalDateTime.now(); // 생성 날짜 추가
-
 }

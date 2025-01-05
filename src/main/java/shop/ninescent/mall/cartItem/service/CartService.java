@@ -1,11 +1,11 @@
-package shop.ninescent.cartItem.service;
+package shop.ninescent.mall.cartItem.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import shop.ninescent.cartItem.domain.Cart;
-import shop.ninescent.cartItem.domain.CartItem;
-import shop.ninescent.cartItem.repository.CartItemRepository;
-import shop.ninescent.cartItem.repository.CartRepository;
+import shop.ninescent.mall.cartItem.domain.Cart;
+import shop.ninescent.mall.cartItem.domain.CartItem;
+import shop.ninescent.mall.cartItem.repository.CartItemRepository;
+import shop.ninescent.mall.cartItem.repository.CartRepository;
 
 import java.util.List;
 
