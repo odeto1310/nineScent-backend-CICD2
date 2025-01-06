@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.ninescent.mall.qna.dto.QnaRequestDTO;
 import shop.ninescent.mall.qna.dto.QnaResponseDTO;
+import shop.ninescent.mall.qna.dto.UpdateQnaRequestDTO;
 import shop.ninescent.mall.qna.service.QnaService;
 
 import java.util.List;
@@ -32,5 +33,17 @@ public class QnaBoardController {
     public ResponseEntity<List<QnaResponseDTO>> findQnaByUserNo(@PathVariable Long userNo) {
         List<QnaResponseDTO> responseDTOList = qnaService.findQnaByUserNo(userNo);
         return ResponseEntity.ok(responseDTOList);
+    }
+
+    @PutMapping("/{questionId}")
+    public ResponseEntity<QnaResponseDTO> updateQna(@PathVariable Long questionId, @RequestBody UpdateQnaRequestDTO updateDTO) {
+        QnaResponseDTO responseDTO = qnaService.updateQna(questionId, updateDTO);
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @DeleteMapping("/{questionId}")
+    public ResponseEntity<QnaResponseDTO> deleteQna(@PathVariable Long questionId) {
+        qnaService.deleteQna(questionId);
+        return ResponseEntity.noContent().build();
     }
 }

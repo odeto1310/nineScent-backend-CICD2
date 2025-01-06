@@ -41,6 +41,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
+//                      .requestMatchers("/api/auth/**", "/api/public/**", "/api/review/**", "/api/qna/**", "/api/cart/**", "api/order/**").permitAll()
                         .requestMatchers("/api/public/**").permitAll() // 공개 API
                         .requestMatchers("/api/products/**").permitAll() // 상품 관련 API
                         .requestMatchers("/api/auth/**").permitAll() // 인증 관련 API
