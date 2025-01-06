@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
         }
         // 중복 확인
         if (checkUsernameDuplicate(dto.getUserId()) || checkDuplicateEmail(dto.getEmail())) {
-            throw new IllegalArgumentException("User ID or Email already exists.");
+            throw new IllegalArgumentException("이미 사용 중인 아이디 또는 이메일입니다.");
         }
         // User 객체 생성 및 비밀번호 암호화
         User user = dto.toEntity(passwordEncoder.encode(dto.getPassword()));
