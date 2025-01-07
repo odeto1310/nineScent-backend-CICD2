@@ -74,6 +74,7 @@ CREATE TABLE address (
                          addr_request	varchar(255)	NOT NULL,
                          is_default	boolean	NOT NULL,
                          is_liked	boolean	NOT NULL,
+                         is_extra_fee BOOLEAN DEFAULT FALSE,
                          last_used	DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -163,3 +164,4 @@ SELECT * FROM stock_log;
 SELECT * FROM cart;
 SELECT * FROM cart_item;
 SELECT * FROM item;
+SELECT * FROM address;

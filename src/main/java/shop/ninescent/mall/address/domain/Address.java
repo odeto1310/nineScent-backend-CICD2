@@ -1,4 +1,4 @@
-package shop.ninescent.mall.order.domain;
+package shop.ninescent.mall.address.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -30,6 +30,8 @@ public class Address {
     private Boolean isDefault; // 기본 주소 여부
     @Column(nullable = false)
     private Boolean isLiked; // 즐겨찾기 여부
+    @Column(nullable = false)
+    private Boolean isExtraFee; // 배송 추가비 여부
     @Column(nullable = true)
     private LocalDateTime lastUsed; // 마지막 사용 시간
 }
