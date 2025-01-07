@@ -41,7 +41,6 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-//                      .requestMatchers("/api/auth/**", "/api/public/**", "/api/review/**", "/api/qna/**", "/api/cart/**", "api/order/**").permitAll()
                         .requestMatchers("/api/public/**").permitAll() // 공개 API
                         .requestMatchers("/api/products/**").permitAll() // 상품 관련 API
                         .requestMatchers("/api/auth/**").permitAll() // 인증 관련 API
@@ -49,6 +48,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/cart/**").permitAll() // 삭제예정
                         .requestMatchers("/api/order/**").permitAll() // 삭제예정
                         .requestMatchers("/api/address/**").permitAll() // 삭제예정
+                        .requestMatchers("/api/categories/**").permitAll()
                         .requestMatchers("/api/user/delete-member", "/api/user/{username}/**").authenticated() // 회원탈퇴, 회원정보 수정 인증 필요
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") // 관리자 권한 필요
                         .anyRequest().authenticated() // 그 외 요청은 인증 필요
