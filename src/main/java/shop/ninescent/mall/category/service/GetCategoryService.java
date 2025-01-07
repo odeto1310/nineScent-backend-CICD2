@@ -3,7 +3,7 @@ package shop.ninescent.mall.category.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import shop.ninescent.mall.category.domain.Category;
-import shop.ninescent.mall.category.domain.Item;
+import shop.ninescent.mall.order.domain.Item;
 import shop.ninescent.mall.category.domain.SubCategory;
 import shop.ninescent.mall.category.dto.CategoryResponseDTO;
 import shop.ninescent.mall.category.dto.ItemListResponseDTO;
