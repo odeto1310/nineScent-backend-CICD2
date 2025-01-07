@@ -55,4 +55,20 @@ public class User {
         socialAccount.setUser(this);
         this.socialAccounts.add(socialAccount);
     }
+
+    // UserVO로 변환
+    public UserVO toVO() {
+        return UserVO.builder()
+                .userNo(this.userNo)
+                .name(this.name)
+                .userId(this.userId)
+                .email(this.email)
+                .address(this.address)
+                .phone(this.phone)
+                .createdAt(this.createdAt)
+                .birth(this.birth)
+                .role(this.role.name()) // Enum을 문자열로 변환
+                .build();
+    }
+
 }
