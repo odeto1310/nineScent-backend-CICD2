@@ -42,6 +42,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         // 특정 경로에 대해 인증 및 권한 설정
+
                         .requestMatchers("/api/user/delete-member", "/api/user/{username}/**").authenticated() // 회원탈퇴, 회원정보 수정 인증 필요
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") // 관리자 권한 필요
 

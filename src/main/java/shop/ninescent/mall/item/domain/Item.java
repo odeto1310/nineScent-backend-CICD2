@@ -1,28 +1,29 @@
-package shop.ninescent.mall.order.domain;
+package shop.ninescent.mall.item.domain;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "item")
-@Data
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long itemId;
     @Column(nullable = false)
-    private String itemName;
-    @Column(nullable = false)
     private Long subCategoryId;
+    @Column(nullable = false)
+    private String itemName;
     @Column(nullable = false)
     private Integer categoryId;
     @Column(nullable = true)
-    private String size;
+    private String itemSize;
     @Column(nullable = true)
-    private String description;
+    private String itemDescription;
     @Column(nullable = false)
     private Long price;
     @Column(nullable = true)
@@ -34,11 +35,11 @@ public class Item {
     @Column(nullable = true)
     private LocalDate discountEnd;
     @Column(nullable = true)
-    private String discountDesc;
+    private String discountDescription;
     @Column(nullable = false)
-    private Integer stock;
+    private int stock;
     @Column(nullable = true)
-    private String photo;
+    private String mainPhoto;
     @Column(nullable = true)
-    private String detail;
+    private String detailPhoto;
 }

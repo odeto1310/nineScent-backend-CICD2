@@ -20,17 +20,17 @@ CREATE TABLE `item` (
                         `sub_category_id` BIGINT NOT NULL,
                         `item_name` VARCHAR(200) NOT NULL,
                         `category_id` INT NOT NULL,
-                        `size` VARCHAR(200) NULL,
-                        `description` TEXT NULL,
+                        `item_size` VARCHAR(200) NULL,
+                        `item_description` TEXT NULL,
                         `price` DECIMAL(10,2) NOT NULL,
                         `discount_rate` INT DEFAULT 0,
                         `discounted_price` DECIMAL(10,2) NULL,
                         `discount_start` DATE NULL,
                         `discount_end` DATE NULL,
-                        `discount_desc` VARCHAR(4000) NULL,
+                        `discount_description` VARCHAR(4000) NULL,
                         `stock` INT DEFAULT 0,
-                        `photo` VARCHAR(4000) NULL,
-                        `detail` VARCHAR(4000) NULL,
+                        `main_photo` VARCHAR(4000) NULL,
+                        `detail_photo` VARCHAR(4000) NULL,
                         PRIMARY KEY (`item_id`)
 );
 
@@ -74,6 +74,7 @@ CREATE TABLE address (
                          addr_request	varchar(255)	NOT NULL,
                          is_default	boolean	NOT NULL,
                          is_liked	boolean	NOT NULL,
+                         is_extra_fee BOOLEAN DEFAULT FALSE,
                          last_used	DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -110,7 +111,7 @@ VALUES
     ('Park Jaehyun', 'jaehyun89', 'hashed_password_2', 'jaehyun89@example.com', 'Busan, Korea', '010-9876-5432', '2024-06-05 12:30:00', '1989-07-22', default),
     ('Lee Sohyun', 'sohyun_admin', 'hashed_password_3', 'sohyun_admin@example.com', 'Incheon, Korea', '010-5678-1234', '2024-06-10 15:45:00', '1992-11-05', default);
 
-INSERT INTO `item` (`sub_category_id`, `item_name`, `category_id`, `size`, `description`, `price`, `discount_rate`, `discounted_price`, `discount_start`, `discount_end`, `discount_desc`, `stock`, `photo`, `detail`)
+INSERT INTO `item` (`sub_category_id`, `item_name`, `category_id`, `item_size`, `item_description`, `price`, `discount_rate`, `discounted_price`, `discount_start`, `discount_end`, `discount_description`, `stock`, `main_photo`, `detail_photo`)
 VALUES
     (1, 'Classic T-Shirt', 10, 'M', 'Comfortable cotton T-shirt', 15000.00, 10, 13500.00, '2024-06-01', '2024-06-15', 'Summer Sale', 100, 'classic_tshirt.jpg', 'Available in multiple colors'),
     (2, 'Running Shoes', 20, '270mm', 'Lightweight running shoes', 85000.00, 15, 72250.00, '2024-06-05', '2024-06-20', 'Limited Time Discount', 50, 'running_shoes.jpg', 'Perfect for jogging and exercise'),
@@ -163,3 +164,4 @@ SELECT * FROM stock_log;
 SELECT * FROM cart;
 SELECT * FROM cart_item;
 SELECT * FROM item;
+SELECT * FROM address;

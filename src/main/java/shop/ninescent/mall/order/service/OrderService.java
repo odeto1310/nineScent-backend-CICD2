@@ -4,14 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import shop.ninescent.mall.cartItem.domain.CartItem;
 import shop.ninescent.mall.cartItem.repository.CartItemRepository;
-import shop.ninescent.mall.order.domain.Item;
-import shop.ninescent.mall.order.domain.Address;
-import shop.ninescent.mall.order.domain.OrderItems;
+import shop.ninescent.mall.address.domain.Address;
+import shop.ninescent.mall.item.domain.Item;
+import shop.ninescent.mall.item.repository.ItemRepository;
 import shop.ninescent.mall.order.domain.StockLog;
 import shop.ninescent.mall.order.dto.OrderItemDTO;
-import shop.ninescent.mall.order.repository.AddressRepository;
-import shop.ninescent.mall.order.repository.ItemRepository;
-import shop.ninescent.mall.order.repository.OrderItemRepository;
+import shop.ninescent.mall.address.repository.AddressRepository;
 import shop.ninescent.mall.order.repository.StockLogRepository;
 
 import java.util.List;
@@ -31,12 +29,13 @@ public class OrderService {
     private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
     // 단일 상품 주문 준비
-    public OrderItemDTO prepareSingleOrder(Long itemId, Integer quantity, Long addrNo) {
+    public OrderItemDTO prepareSingleOrder(Long itemId, Integer quantity, Long userNo) {
         // stock 관리
         adjustStock(itemId, quantity, "REDUCE");
 
-        Address address = addressRepository.findById(addrNo)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid addressId"));
+        // 기본 주소 가져오기
+        Address defaultAddress = addressRepository.findByUserNoAndIsDefaultTrue(userNo)
+                .orElseThrow(() -> new IllegalArgumentException("Default address not found"));
 
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid itemId"));
@@ -47,14 +46,16 @@ public class OrderService {
                 quantity,
                 item.getPrice(),
                 item.getDiscountedPrice(),
-                address
+                defaultAddress
         );
     }
 
     // 장바구니 기반 주문
-    public List<OrderItemDTO> prepareCartOrder(Long cartId, Long addrNo) {
-        Address address = addressRepository.findById(addrNo)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid addressId"));
+    public List<OrderItemDTO> prepareCartOrder(Long cartId, Long userNo) {
+        // 기본 주소 가져오기
+        Address defaultAddress = addressRepository.findByUserNoAndIsDefaultTrue(userNo)
+                .orElseThrow(() -> new IllegalArgumentException("Default address not found"));
+
 
         List<CartItem> cartItems = cartItemRepository.findByCartIdAndIsSelectedTrue(cartId);
 
@@ -73,11 +74,14 @@ public class OrderService {
                             cartItem.getQuantity(),
                             item.getPrice(),
                             item.getDiscountedPrice(),
-                            address
+                            defaultAddress
                     );
                 })
                 .collect(Collectors.toList());
     }
+
+    // 배송비 조정
+
     // 재고 조정
     private void adjustStock(Long itemId, Integer quantity, String changeType) {
         Item item = itemRepository.findById(itemId)

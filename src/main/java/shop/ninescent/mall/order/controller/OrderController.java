@@ -20,11 +20,11 @@ public class OrderController {
     public ResponseEntity<?> prepareOrder(@RequestBody OrderPrepareRequestDTO request) {
         if (request.getCartId() != null) {
             // 장바구니 기반 주문하기 페이지
-            List<OrderItemDTO> orderDetails = orderService.prepareCartOrder(request.getCartId(), request.getAddrNo());
+            List<OrderItemDTO> orderDetails = orderService.prepareCartOrder(request.getCartId(), request.getUserNo());
             return ResponseEntity.ok(orderDetails);
         } else if (request.getItemId() != null && request.getQuantity() != null) {
             // 단일 상품 기반 주문하기 페이지
-            OrderItemDTO orderDetail = orderService.prepareSingleOrder(request.getItemId(), request.getQuantity(), request.getAddrNo());
+            OrderItemDTO orderDetail = orderService.prepareSingleOrder(request.getItemId(), request.getQuantity(), request.getUserNo());
             return ResponseEntity.ok(orderDetail);
         } else {
             return ResponseEntity.badRequest().body("Invalidd request. ");
