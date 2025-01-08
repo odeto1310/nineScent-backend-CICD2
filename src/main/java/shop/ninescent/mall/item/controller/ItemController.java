@@ -1,7 +1,7 @@
 package shop.ninescent.mall.item.controller;
 
 import org.springframework.web.bind.annotation.*;
-import shop.ninescent.mall.item.entity.Item;
+import shop.ninescent.mall.item.domain.Item;
 import shop.ninescent.mall.item.service.ItemService;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class ItemController {
     }
 
     @GetMapping("/{id}")
-    public Item getItemById(@PathVariable int id) {
+    public Item getItemById(@PathVariable Long id) {
         return itemService.getItemById(id);
     }
 
@@ -32,13 +32,13 @@ public class ItemController {
     }
 
     @PutMapping("/{id}")
-    public Item updateItem(@PathVariable("id") int id, @RequestBody Item item) {
+    public Item updateItem(@PathVariable("id") long id, @RequestBody Item item) {
         item.setItemId(id);
         return itemService.saveItem(item);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteItem(@PathVariable("id") int id) {
+    public void deleteItem(@PathVariable("id") Long id) {
         itemService.deleteItem(id);
     }
 }

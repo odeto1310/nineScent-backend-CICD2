@@ -1,4 +1,4 @@
-package shop.ninescent.mall.item.entity;
+package shop.ninescent.mall.item.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -11,23 +11,35 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "item")
 public class Item {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int itemId;
-
-    private int subCategoryId;
+    private Long itemId;
+    @Column(nullable = false)
+    private Long subCategoryId;
+    @Column(nullable = false)
     private String itemName;
-    private int categoryId;
+    @Column(nullable = false)
+    private Integer categoryId;
+    @Column(nullable = true)
     private String itemSize;
+    @Column(nullable = true)
     private String itemDescription;
-    private int price;
-    private int discountRate;
-    private int discountedPrice;
+    @Column(nullable = false)
+    private Long price;
+    @Column(nullable = true)
+    private Integer discountRate; // 할인율
+    @Column(nullable = true)
+    private Long discountedPrice;
+    @Column(nullable = true)
     private LocalDate discountStart;
+    @Column(nullable = true)
     private LocalDate discountEnd;
+    @Column(nullable = true)
     private String discountDescription;
+    @Column(nullable = false)
     private int stock;
+    @Column(nullable = true)
     private String mainPhoto;
+    @Column(nullable = true)
     private String detailPhoto;
 }

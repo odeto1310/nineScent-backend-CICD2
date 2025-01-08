@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import shop.ninescent.mall.cartItem.domain.CartItem;
 import shop.ninescent.mall.cartItem.repository.CartItemRepository;
-import shop.ninescent.mall.order.domain.Item;
 import shop.ninescent.mall.address.domain.Address;
+import shop.ninescent.mall.item.domain.Item;
+import shop.ninescent.mall.item.repository.ItemRepository;
 import shop.ninescent.mall.order.domain.StockLog;
 import shop.ninescent.mall.order.dto.OrderItemDTO;
 import shop.ninescent.mall.address.repository.AddressRepository;
-import shop.ninescent.mall.order.repository.ItemRepository;
 import shop.ninescent.mall.order.repository.StockLogRepository;
 
 import java.util.List;

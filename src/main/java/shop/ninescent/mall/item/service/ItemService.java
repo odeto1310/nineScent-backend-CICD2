@@ -1,7 +1,7 @@
 package shop.ninescent.mall.item.service;
 
 import org.springframework.stereotype.Service;
-import shop.ninescent.mall.item.entity.Item;
+import shop.ninescent.mall.item.domain.Item;
 import shop.ninescent.mall.item.repository.ItemRepository;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public class ItemService {
         return itemRepository.findAll();
     }
 
-    public Item getItemById(int id) {
+    public Item getItemById(Long id) {
         return itemRepository.findById(id).orElseThrow(() -> new RuntimeException("Item not found"));
     }
 
@@ -27,7 +27,7 @@ public class ItemService {
         return itemRepository.save(item);
     }
 
-    public void deleteItem(int id) {
+    public void deleteItem(Long id) {
         itemRepository.deleteById(id);
     }
 }

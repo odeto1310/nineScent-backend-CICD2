@@ -45,6 +45,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/products/**").permitAll() // 상품 관련 API
                         .requestMatchers("/api/auth/**").permitAll() // 인증 관련 API
                         .requestMatchers("/api/user/**").permitAll() // 기본적으로 인증 필요 없음
+                        .requestMatchers("/api/items/**").permitAll() // 기본적으로 인증 필요 없음
                         .requestMatchers("/api/cart/**").permitAll() // 삭제예정
                         .requestMatchers("/api/order/**").permitAll() // 삭제예정
                         .requestMatchers("/api/address/**").permitAll() // 삭제예정
