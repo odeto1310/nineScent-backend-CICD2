@@ -17,8 +17,6 @@ public class AddressService {
     private final ShipmentExtraRepository shipmentExtraRepository;
 
     public Address addAddress(Long userNo, AddressDTO addressDTO) {
-        boolean isExtraFee = shipmentExtraRepository.existsByExtraZipcode(String.valueOf(addressDTO.getAddrZipcode()));
-
         Address address = new Address();
         address.setUserNo(userNo);
         address.setAddrName(addressDTO.getAddrName());
@@ -29,9 +27,9 @@ public class AddressService {
         address.setAddrRequest(addressDTO.getAddrRequest());
         address.setIsDefault(false);
         address.setIsLiked(false);
+        // extraFee확인
+        boolean isExtraFee = shipmentExtraRepository.existsByExtraZipcode(String.valueOf(addressDTO.getAddrZipcode()));
         address.setIsExtraFee(isExtraFee);
-
-
         return addressRepository.save(address);
     }
 
@@ -46,9 +44,59 @@ public class AddressService {
         return addressRepository.findAllByUserNo(userNo);
     }
 
-//    // 특정 주소 가져오기
-//    public Address getAddressByIdAndUserNo(Long addrNo, Long userNo) {
-//        return addressRepository.findByAddrNoAndUserNo(addrNo, userNo)
-//                .orElseThrow(() -> new IllegalArgumentException("Address not found for user"));
-//    }
+    public void updateAddress(Long addrNo, AddressDTO addressDTO) {
+        Address address = addressRepository.findById(addrNo)
+                .orElseThrow(() -> new IllegalArgumentException("Address not found"));
+
+        address.setAddrName(addressDTO.getAddrName());
+        address.setAddrContact(addressDTO.getAddrContact());
+        address.setAddrZipcode(String.valueOf(addressDTO.getAddrZipcode()));
+        address.setAddrAddress(addressDTO.getAddrAddress());
+        address.setAddrDetail(addressDTO.getAddrDetail());
+        address.setAddrRequest(addressDTO.getAddrRequest());
+
+        // extraFee확인
+        boolean isExtraFee = shipmentExtraRepository.existsByExtraZipcode(String.valueOf(addressDTO.getAddrZipcode()));
+        address.setIsExtraFee(isExtraFee);
+        addressRepository.save(address);
+    }
+
+    public void deleteAddress(Long addrNo) {
+        Address address = addressRepository.findById(addrNo)
+                .orElseThrow(() -> new IllegalArgumentException("Address not found"));
+
+        // default 이외 제거
+        if(address.getIsDefault()) {
+            throw new IllegalStateException("Default address cannot be deleted.");
+        }
+        addressRepository.delete(address);
+    }
+
+    // Liked값 변경
+    public void setLikedAddress(Long addrNo) {
+        Address address = addressRepository.findById(addrNo)
+                .orElseThrow(() -> new IllegalArgumentException("Address not found"));
+        // isLiked 값을 반전(true → false, false → true)
+        address.setIsLiked(!address.getIsLiked());
+        addressRepository.save(address);
+    }
+    // Default값 변경
+    public void setDefaultAddress(Long addrNo, Long userNo) {
+        List<Address> userAddresses = addressRepository.findAllByUserNo(userNo);
+
+        // 모든 주소의 isDefault를 false로 설정
+        userAddresses.forEach(address -> {
+            if(address.getIsDefault()) {
+                address.setIsDefault(false);
+                addressRepository.save(address);
+            }
+        });
+
+        // 선택된 주소를 default true로 변경
+        Address selectedAddress = addressRepository.findById(addrNo)
+                .orElseThrow(() -> new IllegalArgumentException("Address not found"));
+        selectedAddress.setIsDefault(true);
+        addressRepository.save(selectedAddress);
+
+    }
 }

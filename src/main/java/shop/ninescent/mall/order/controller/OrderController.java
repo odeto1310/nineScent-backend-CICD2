@@ -17,14 +17,25 @@ public class OrderController {
 
     @PostMapping("/prepare")
     //주문하기 페이지로 이동 (단일 or 장바구니)
+    // cart test
+    //
     public ResponseEntity<?> prepareOrder(@RequestBody OrderPrepareRequestDTO request) {
         if (request.getCartId() != null) {
             // 장바구니 기반 주문하기 페이지
-            List<OrderItemDTO> orderDetails = orderService.prepareCartOrder(request.getCartId(), request.getUserNo());
+            List<OrderItemDTO> orderDetails = orderService.prepareCartOrder(
+                    request.getCartId(),
+                    request.getUserNo(),
+                    request.getAddrNo() // 선택된 주소 (없으면 default)
+            );
             return ResponseEntity.ok(orderDetails);
         } else if (request.getItemId() != null && request.getQuantity() != null) {
             // 단일 상품 기반 주문하기 페이지
-            OrderItemDTO orderDetail = orderService.prepareSingleOrder(request.getItemId(), request.getQuantity(), request.getUserNo());
+            OrderItemDTO orderDetail = orderService.prepareSingleOrder(
+                    request.getItemId(),
+                    request.getQuantity(),
+                    request.getUserNo(),
+                    request.getAddrNo() // 선택된 주소 (없으면 default)
+            );
             return ResponseEntity.ok(orderDetail);
         } else {
             return ResponseEntity.badRequest().body("Invalidd request. ");

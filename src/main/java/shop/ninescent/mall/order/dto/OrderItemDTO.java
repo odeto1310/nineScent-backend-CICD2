@@ -13,5 +13,5 @@ public class OrderItemDTO {
     private Long originalPrice;
     private Long discountedPrice;
     private Address address; // Address details
-
+    private Long shippingFee; // 배송비 추가
 }
