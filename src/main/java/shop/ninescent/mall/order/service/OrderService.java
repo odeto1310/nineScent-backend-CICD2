@@ -29,13 +29,18 @@ public class OrderService {
     private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
     // 단일 상품 주문 준비
-    public OrderItemDTO prepareSingleOrder(Long itemId, Integer quantity, Long userNo) {
+    public OrderItemDTO prepareSingleOrder(Long itemId, Integer quantity, Long userNo, Long selectedAddrNo) {
         // stock 관리
         adjustStock(itemId, quantity, "REDUCE");
 
-        // 기본 주소 가져오기
-        Address defaultAddress = addressRepository.findByUserNoAndIsDefaultTrue(userNo)
-                .orElseThrow(() -> new IllegalArgumentException("Default address not found"));
+        // 기본 주소 또는 선택된 주소 가져오기
+        Address address = (selectedAddrNo != null) ?
+                addressRepository.findById(selectedAddrNo)
+                                .orElseThrow(() -> new IllegalArgumentException("selected address not found"))
+                : addressRepository.findByUserNoAndIsDefaultTrue(userNo)
+                                .orElseThrow(() -> new IllegalArgumentException("Default address not found"));
+        // 배송비 계산
+        Long shippingFee = address.getIsExtraFee() ? 5000L : 0L;
 
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid itemId"));
@@ -46,15 +51,21 @@ public class OrderService {
                 quantity,
                 item.getPrice(),
                 item.getDiscountedPrice(),
-                defaultAddress
+                address,
+                shippingFee
         );
     }
 
     // 장바구니 기반 주문
-    public List<OrderItemDTO> prepareCartOrder(Long cartId, Long userNo) {
-        // 기본 주소 가져오기
-        Address defaultAddress = addressRepository.findByUserNoAndIsDefaultTrue(userNo)
+    public List<OrderItemDTO> prepareCartOrder(Long cartId, Long userNo, Long selectedAddrNo) {
+        // 기본 주소 또는 선택된 주소 가져오기
+        Address address = (selectedAddrNo != null) ?
+                addressRepository.findById(selectedAddrNo)
+                        .orElseThrow(() -> new IllegalArgumentException("selected address not found"))
+                : addressRepository.findByUserNoAndIsDefaultTrue(userNo)
                 .orElseThrow(() -> new IllegalArgumentException("Default address not found"));
+        // 배송비 계산
+        Long shippingFee = address.getIsExtraFee() ? 5000L : 0L;
 
 
         List<CartItem> cartItems = cartItemRepository.findByCartIdAndIsSelectedTrue(cartId);
@@ -74,7 +85,8 @@ public class OrderService {
                             cartItem.getQuantity(),
                             item.getPrice(),
                             item.getDiscountedPrice(),
-                            defaultAddress
+                            address,
+                            shippingFee
                     );
                 })
                 .collect(Collectors.toList());
