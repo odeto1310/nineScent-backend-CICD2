@@ -7,24 +7,23 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import shop.ninescent.mall.member.domain.User;
 import shop.ninescent.mall.member.repository.UserRepository;
+import shop.ninescent.mall.security.dto.CustomUserDetails;
 
 
 @Service
-@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
+
 
     private final UserRepository userRepository;
 
+    public CustomUserDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-        shop.ninescent.mall.member.domain.User user = userRepository.findByUserId(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username"+username));
-
-        // User 엔티티를 Spring Security의 UserDetails로 변환하여 반환
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getUserId()) // Spring Security의 username 필드에 매핑
-                .password(user.getPassword()) // Spring Security의 password 필드에 매핑
-                .roles(user.getRole().name()) // 사용자 권한 (Enum -> String 변환)
-                .build();
+        User user = userRepository.findByUserId(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+        return new CustomUserDetails(user); // CustomUserDetails로 반환
     }
 }

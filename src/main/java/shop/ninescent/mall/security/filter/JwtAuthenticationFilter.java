@@ -1,4 +1,4 @@
-package shop.ninescent.mall.security;
+package shop.ninescent.mall.security.filter;
 
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.FilterChain;
@@ -45,5 +45,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return bearerToken.substring(7);
         }
         return null;
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        // 로그인 및 회원가입 경로는 필터링 제외
+        return path.equals("/api/user/login") || path.equals("/api/user/join");
     }
 }
