@@ -1,4 +1,4 @@
-package shop.ninescent.mall.security;
+package shop.ninescent.mall.security.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import shop.ninescent.mall.security.filter.JwtAuthenticationFilter;
 import shop.ninescent.mall.security.handler.CustomAccessDeniedHandler;
 import shop.ninescent.mall.security.handler.CustomAuthenticationEntryPoint;
 
@@ -42,15 +43,13 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         // 특정 경로에 대해 인증 및 권한 설정
-
+                        .requestMatchers("/api/auth/**", "/api/user/**").permitAll()
                         .requestMatchers("/api/user/delete-member", "/api/user/{username}/**").authenticated() // 회원탈퇴, 회원정보 수정 인증 필요
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") // 관리자 권한 필요
 
                         // 그 외 /api/** 아래 모든 경로를 허용
-                        .requestMatchers("/api/**").permitAll()
-
-                        // 나머지 요청은 인증 필요
-                        .anyRequest().authenticated()
+//                        .requestMatchers("/api/**").permitAll()
+                        .anyRequest().permitAll()
                 )
                 .build();
     }

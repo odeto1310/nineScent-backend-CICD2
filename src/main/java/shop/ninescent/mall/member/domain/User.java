@@ -43,7 +43,7 @@ public class User {
     private Role role; // 사용자 권한
 
     public enum Role {
-        USER, ADMIN
+        ROLE_USER, ROLE_ADMIN
     }
 
     // 소셜 계정 연결 정보를 별도로 관리

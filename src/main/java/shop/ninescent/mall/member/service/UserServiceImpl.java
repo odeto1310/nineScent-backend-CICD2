@@ -69,8 +69,8 @@ public class UserServiceImpl implements UserService {
         User user = dto.toEntity(passwordEncoder.encode(dto.getPassword()));
 
         // Role 설정
-        user.setRole(User.Role.valueOf("ROLE_USER")); // 기본 사용자 권한 설정
-
+//        user.setRole(User.Role.valueOf("ROLE_USER")); // 기본 사용자 권한 설정
+        user.setRole(User.Role.ROLE_USER); // 기본 사용자 권한 설정
         // 사용자 정보 저장
         userRepository.save(user);
 

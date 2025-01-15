@@ -34,7 +34,7 @@ public class UserJoinRequestDTO {
                 .phone(this.phone) // 전화번호 설정 (선택 사항)
                 .birth(this.birth != null ? LocalDate.parse(this.birth) : null) // 생년월일 설정 (null 체크 후 파싱)
                 .createdAt(LocalDateTime.now()) // 현재 시간으로 생성 시간 설정
-                .role(User.Role.USER) // 기본 역할 USER 설정
+                .role(User.Role.ROLE_USER) // 기본 역할 USER 설정
                 .build();
     }
 
