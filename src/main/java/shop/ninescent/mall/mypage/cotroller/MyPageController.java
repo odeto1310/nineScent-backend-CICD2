@@ -1,7 +1,11 @@
 package shop.ninescent.mall.mypage.cotroller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import shop.ninescent.mall.address.domain.Address;
+import shop.ninescent.mall.address.dto.AddressDTO;
+import shop.ninescent.mall.address.service.AddressService;
 import shop.ninescent.mall.mypage.dto.*;
 import shop.ninescent.mall.mypage.service.MyPageService;
 
@@ -14,9 +18,21 @@ public class MyPageController {
     @Autowired
     private MyPageService myPageService;
 
-    @PostMapping("/address")
-    public AddressDto addOrUpdateAddress(@RequestBody AddressDto addressDto) {
-        return myPageService.addOrUpdateAddress(addressDto);
+    @Autowired
+    private AddressService addressService;
+
+    @PostMapping("/address/{userNo}")
+    public ResponseEntity<String> addOrUpdateAddress(@PathVariable Long userNo, @RequestBody AddressDTO addressDto) {
+        Address address = addressService.addAddress(userNo, addressDto);
+        if (address.getIsExtraFee()) {
+            return ResponseEntity.ok("Address added with extra fee");
+        } else {
+            return ResponseEntity.ok("Address added successfully");
+        }
+    }
+    @GetMapping("/addresses/{userNo}")
+    public ResponseEntity<List<Address>> getAllAddresses(@PathVariable Long userNo) {
+        return ResponseEntity.ok(addressService.getAddresses(userNo));
     }
 
     @GetMapping("/orders/{userNo}/status")

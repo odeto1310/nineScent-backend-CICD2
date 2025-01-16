@@ -21,7 +21,7 @@ public class AddressService {
         address.setUserNo(userNo);
         address.setAddrName(addressDTO.getAddrName());
         address.setAddrContact(addressDTO.getAddrContact());
-        address.setAddrZipcode(String.valueOf(addressDTO.getAddrZipcode()));
+        address.setAddrZipcode(addressDTO.getAddrZipcode());
         address.setAddrAddress(addressDTO.getAddrAddress());
         address.setAddrDetail(addressDTO.getAddrDetail());
         address.setAddrRequest(addressDTO.getAddrRequest());
@@ -50,7 +50,7 @@ public class AddressService {
 
         address.setAddrName(addressDTO.getAddrName());
         address.setAddrContact(addressDTO.getAddrContact());
-        address.setAddrZipcode(String.valueOf(addressDTO.getAddrZipcode()));
+        address.setAddrZipcode(addressDTO.getAddrZipcode());
         address.setAddrAddress(addressDTO.getAddrAddress());
         address.setAddrDetail(addressDTO.getAddrDetail());
         address.setAddrRequest(addressDTO.getAddrRequest());

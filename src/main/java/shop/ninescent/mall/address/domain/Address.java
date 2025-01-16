@@ -1,13 +1,19 @@
 package shop.ninescent.mall.address.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "address")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +25,7 @@ public class Address {
     @Column(nullable = false)
     private String addrContact;
     @Column(nullable = false)
-    private String addrZipcode;
+    private Long addrZipcode;
     @Column(nullable = false)
     private String addrAddress;
     @Column(nullable = false)
