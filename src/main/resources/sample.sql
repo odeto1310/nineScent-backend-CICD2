@@ -11,7 +11,7 @@ CREATE TABLE `users` (
                          `phone` VARCHAR(15) NULL,
                          `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
                          `birth` DATE NULL,
-                         `role` VARCHAR(100) NOT NULL DEFAULT 'USER',
+                         `role` VARCHAR(100) NOT NULL DEFAULT 'ROLE_USER',
                          PRIMARY KEY (`user_no`)
 );
 
@@ -157,11 +157,82 @@ VALUES
     (1, 1, 2, 15000.00, 13500.00),  -- Minji의 주문: Classic T-Shirt 2개
     (2, 2, 1, 85000.00, 72250.00);  -- Jaehyun의 주문: Running Shoes 1개
 
-SHOW TABLES;
-SELECT * FROM order_items;
-SELECT * FROM orders;
-SELECT * FROM stock_log;
-SELECT * FROM cart;
-SELECT * FROM cart_item;
-SELECT * FROM item;
-SELECT * FROM address;
+
+-- =================== Shipment Table ===================
+
+CREATE TABLE shipment (
+                          shipment_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                          order_id BIGINT NOT NULL,
+                          user_no BIGINT NOT NULL,
+                          tracking_num VARCHAR(30),
+                          tracking_date DATETIME,
+                          delivery_status VARCHAR(20)
+);
+
+-- =================== Payment Table ===================
+
+CREATE TABLE payment (
+                         payment_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                         order_id BIGINT NOT NULL,
+                         user_no BIGINT NOT NULL,
+                         payment_status VARCHAR(20),
+                         payment_method VARCHAR(20),
+                         payment_date DATETIME,
+                         total_amount BIGINT
+);
+
+-- =================== RefundChange Table ===================
+
+CREATE TABLE refund_change (
+                               refund_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                               order_id BIGINT NOT NULL,
+                               payment_id BIGINT NOT NULL,
+                               shipment_id BIGINT NOT NULL,
+                               delivery_refund_addr_id BIGINT NOT NULL,
+                               delivery_addr_id BIGINT NOT NULL,
+                               refund_change_type INT NOT NULL,  -- 1: 환불, 2: 교환
+                               refund_method VARCHAR(50),
+                               reason_category VARCHAR(50),
+                               reason_text TEXT,
+                               is_done BOOLEAN DEFAULT FALSE,
+                               update_date DATETIME
+);
+
+-- =================== Sample Data for Shipment ===================
+
+INSERT INTO shipment (shipment_id, order_id, user_no, tracking_num, tracking_date, delivery_status)
+VALUES
+    (1, 1, 1, 'TRK1234567890', '2024-01-15 10:30:00', '배송중'),
+    (2, 2, 2, 'TRK0987654321', '2024-01-16 14:45:00', '배송완료');
+
+-- =================== Sample Data for Payment ===================
+
+INSERT INTO payment (payment_id, order_id, user_no, payment_status, payment_method, payment_date, total_amount)
+VALUES
+    (1, 1, 1, '결제완료', '카드', '2024-01-15 09:00:00', 150000),
+    (2, 2, 2, '결제완료', '계좌이체', '2024-01-16 13:00:00', 200000);
+
+-- =================== Sample Data for RefundChange ===================
+
+INSERT INTO refund_change (refund_id, order_id, payment_id, shipment_id, delivery_refund_addr_id, delivery_addr_id, refund_change_type, refund_method, reason_category, reason_text, is_done, update_date)
+VALUES
+    (1, 1, 1, 1, 1, 3, 1, '카드 취소', '상품불량', '제품이 손상되어 도착했습니다.', false, '2024-01-17 08:00:00'),
+    (2, 2, 2, 2, 2, 4, 2, '계좌 환불', '단순변심', '생각보다 크기가 큽니다.', false, '2024-01-18 09:30:00');
+
+-- =================== Sample Data for Business Address (배송/환불 주소) ===================
+
+CREATE TABLE business_address (
+                                  business_address_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                                  business_address_name VARCHAR(100) NOT NULL,
+                                  business_contact VARCHAR(20),
+                                  business_zipcode Long,
+                                  business_address VARCHAR(255),
+                                  business_address_detail VARCHAR(255)
+);
+
+INSERT INTO business_address (business_address_name, business_contact, business_zipcode, business_address, business_address_detail)
+VALUES
+    ('서울 물류센터', '02-1234-5678', '04524', '서울특별시 중구 세종대로 110', 'A동 2층'),
+    ('부산 물류센터', '051-9876-5432', '48941', '부산광역시 중구 중앙대로 26', 'B동 3층');
+
+SELECT * FROM users;

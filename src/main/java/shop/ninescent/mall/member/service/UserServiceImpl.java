@@ -51,6 +51,15 @@ public class UserServiceImpl implements UserService {
         return user.toVO();
     }
 
+    // 회원 정보 조회
+    @Override
+    public UserVO getInfo(Long userNo) {
+        User user = userRepository.findByUserNo(userNo)
+                .orElseThrow(() -> new NoSuchElementException("해당 사용자를 찾을 수 없습니다."));
+        return user.toVO();
+    }
+
+
     @Transactional
     @Override
     public UserVO join(UserJoinRequestDTO dto) {

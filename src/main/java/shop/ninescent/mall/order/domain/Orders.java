@@ -11,7 +11,7 @@ public class Orders {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long orderId;
     @Column(nullable = false)
-    private String userNo;
+    private long userNo;
     @Column(nullable = false)
     private long addrNo;
     @Column(nullable = false)

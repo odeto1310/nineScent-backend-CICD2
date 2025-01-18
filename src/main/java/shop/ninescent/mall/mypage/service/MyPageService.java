@@ -1,40 +1,51 @@
 package shop.ninescent.mall.mypage.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import shop.ninescent.mall.mypage.dto.OrderDto;
-import shop.ninescent.mall.mypage.dto.ReviewDto;
-import shop.ninescent.mall.mypage.repository.OrderRepository;
-import shop.ninescent.mall.mypage.repository.ReviewRepository;
+import shop.ninescent.mall.member.domain.UserVO;
+import shop.ninescent.mall.member.service.UserService;
+import shop.ninescent.mall.mypage.dto.MyPageDTO;
+import shop.ninescent.mall.orderhistory.dto.OrderHistoryDTO;
+import shop.ninescent.mall.orderhistory.service.OrderHistoryService;
+import shop.ninescent.mall.refundchange.dto.RefundChangeDTO;
+import shop.ninescent.mall.refundchange.service.RefundChangeService;
+import shop.ninescent.mall.shipment.dto.ShipmentDTO;
+import shop.ninescent.mall.shipment.service.ShipmentService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class MyPageService {
 
-    @Autowired
-    private OrderRepository orderRepository;
+    private final UserService userService;
+    private final OrderHistoryService orderHistoryService;
+    private final ShipmentService shipmentService;
+    private final RefundChangeService refundChangeService;
 
-    @Autowired
-    private ReviewRepository reviewRepository;
+    // 마이페이지 통합 조회
+    public MyPageDTO getMyPageOverview(Long userNo) {
+        // 사용자 정보
+        UserVO userInfo = userService.getInfo(userNo);
 
-    public List<OrderDto> getShippingStatus(Long userNo) {
-        // Implementation
-        return null;
-    }
+        // 최근 주문 내역
+        List<OrderHistoryDTO> recentOrders = orderHistoryService.getOrderHistory(userNo);
 
-    public String requestOrderChange(Long orderId, OrderDto orderDto) {
-        // Implementation
-        return "Request processed successfully.";
-    }
+        // 주문 ID 리스트로 배송/환불 정보 조회
+        List<Long> orderIds = recentOrders.stream().map(OrderHistoryDTO::getOrderId).collect(Collectors.toList());
 
-    public ReviewDto writeReview(ReviewDto reviewDto) {
-        // Implementation
-        return null;
-    }
+        // 주문별 배송 상태 조회
+        List<ShipmentDTO> shipmentStatuses = shipmentService.getShipmentsByOrderIds(orderIds);
 
-    public List<ReviewDto> getAllReviewsByUser(Long userNo) {
-        // Implementation
-        return null;
+        // 주문별 환불/교환 내역 조회
+        List<RefundChangeDTO> refundChangeHistories = refundChangeService.getRefundChangesByOrderIds(orderIds);
+
+        return MyPageDTO.builder()
+                .userInfo(userInfo)
+                .recentOrders(recentOrders).
+                shipmentStatuses(shipmentStatuses).
+                refundChangeHistories(refundChangeHistories)
+                .build();
     }
 }

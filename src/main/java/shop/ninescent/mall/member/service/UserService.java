@@ -15,6 +15,7 @@ public interface UserService {
 
     // 회원 정보 조회 및 업데이트
     UserVO get(String username);
+    UserVO getInfo(Long userNo);
     UserVO join(UserJoinRequestDTO member);
     String checkPasswordService(String password);
 
