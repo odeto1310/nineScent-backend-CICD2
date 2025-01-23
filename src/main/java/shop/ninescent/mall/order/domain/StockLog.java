@@ -2,6 +2,7 @@ package shop.ninescent.mall.order.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import shop.ninescent.mall.item.domain.Item;
 
 import java.time.LocalDateTime;
 
@@ -12,8 +13,11 @@ public class StockLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long logId;
-    @Column(nullable = false)
-    private Long itemId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_id", nullable = false)
+    private Item item;
+
     @Column(nullable = false)
     private String changeType; // "REDUCE", "RESTORE"
     @Column(nullable = false)
@@ -21,8 +25,8 @@ public class StockLog {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    public StockLog(Long itemId, Integer quantity, String changeType) {
-        this.itemId = itemId;
+    public StockLog(Item item, Integer quantity, String changeType) {
+        this.item = item;
         this.quantity = quantity;
         this.changeType = changeType;
     }

@@ -3,6 +3,10 @@ package shop.ninescent.mall.order.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import shop.ninescent.mall.address.domain.Address;
+import shop.ninescent.mall.item.domain.Item;
+import shop.ninescent.mall.member.domain.User;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -12,6 +16,9 @@ public class OrderItemDTO {
     private Integer quantity;
     private Long originalPrice;
     private Long discountedPrice;
-    private Address address; // Address details
-    private Long shippingFee; // 배송비 추가
+    private Long userId;
+    private String userName;
+    private Long addressId;
+    private String addressDetail;
+    private Long shippingFee;
 }

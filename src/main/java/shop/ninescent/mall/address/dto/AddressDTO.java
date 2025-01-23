@@ -10,10 +10,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class AddressDTO {
+    private Long addrNo;
     private String addrName;
     private String addrContact;
     private Long addrZipcode;
     private String addrAddress;
     private String addrDetail;
     private String addrRequest;
+    private Boolean isDefault;
+    private Boolean isLiked;
+    private Boolean isExtraFee;
 }

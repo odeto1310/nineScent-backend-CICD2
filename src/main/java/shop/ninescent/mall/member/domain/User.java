@@ -1,7 +1,10 @@
 package shop.ninescent.mall.member.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import shop.ninescent.mall.cartItem.domain.Cart;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -41,6 +44,10 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role; // 사용자 권한
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore // Prevent serialization of User's Cart
+    private Cart cart; // Cart와 OneToOne 관계
 
     public enum Role {
         ROLE_USER, ROLE_ADMIN

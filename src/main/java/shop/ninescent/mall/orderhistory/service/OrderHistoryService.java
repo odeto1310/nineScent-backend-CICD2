@@ -6,6 +6,8 @@ import shop.ninescent.mall.address.domain.Address;
 import shop.ninescent.mall.address.repository.AddressRepository;
 import shop.ninescent.mall.item.domain.Item;
 import shop.ninescent.mall.item.repository.ItemRepository;
+import shop.ninescent.mall.member.domain.User;
+import shop.ninescent.mall.member.repository.UserRepository;
 import shop.ninescent.mall.order.domain.OrderItems;
 import shop.ninescent.mall.order.domain.Orders;
 import shop.ninescent.mall.order.dto.OrderItemDTO;
@@ -22,23 +24,21 @@ import java.util.stream.Collectors;
 public class OrderHistoryService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
-    private final ItemRepository itemRepository;
-    private final AddressRepository addressRepository;
+    private final UserRepository userRepository;
 
     public List<OrderHistoryDTO> getOrderHistory(Long userNo) {
-        // 최근 3개월 주문 내역 조회 하려했으나 일단 다 가져오자~,
-        LocalDate threeMonthsAgo = LocalDate.now().minusMonths(3);
+        // Retrieve all orders for the user (adjustable for date filtering)
+        List<Orders> userOrders = orderRepository.findByUserUserNo(userNo);
 
-        List<Orders> recentOrders = orderRepository.findByUserNo(userNo);
+        return userOrders.stream().map(order -> {
+            // Retrieve the items associated with the order
+            List<OrderItems> orderItems = orderItemRepository.findByOrderOrderId(order.getOrderId());
 
-        return recentOrders.stream().map(order -> {
-            List<OrderItems> orderItems = orderItemRepository.findByOrderId(order.getOrderId());
-
+            // Map order items to DTOs
             List<OrderItemDTO> itemDTOs = orderItems.stream().map(orderItem -> {
-                Item item = itemRepository.findById(orderItem.getItemId())
-                        .orElseThrow(() -> new IllegalArgumentException("Item not found"));
-                Address address = addressRepository.findById(order.getAddrNo())
-                        .orElseThrow(() -> new IllegalArgumentException("Address not found"));
+                Item item = orderItem.getItem(); // Ensure OrderItems is linked to Item via ManyToOne
+                Address address = order.getAddress(); // Ensure Orders is linked to Address via ManyToOne
+                User user = order.getUser();
 
                 return new OrderItemDTO(
                         item.getItemId(),
@@ -46,11 +46,15 @@ public class OrderHistoryService {
                         orderItem.getQuantity(),
                         item.getPrice(),
                         item.getDiscountedPrice(),
-                        address,
+                        user.getUserNo(),
+                        user.getName(),
+                        address.getAddrNo(),
+                        address.getAddrDetail(),
                         address.getIsExtraFee() ? 5000L : 0L
                 );
             }).collect(Collectors.toList());
 
+            // Return an OrderHistoryDTO for each order
             return new OrderHistoryDTO(
                     order.getOrderId(),
                     order.getOrderDate(),

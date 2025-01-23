@@ -9,12 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartItemDTO {
-    @JsonProperty("cartId")
-    private Long cartId;
-    @JsonProperty("itemId")
+    private Long cartItemId;
     private Long itemId;
-    @JsonProperty("quantity")
+    private String itemName;
     private Integer quantity;
+    private Boolean isSelected;
     @JsonProperty("action")
     private String action;     // increase, decrease, set
 }

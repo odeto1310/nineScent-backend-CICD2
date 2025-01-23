@@ -5,16 +5,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import shop.ninescent.mall.order.dto.OrderItemDTO;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class OrderHistoryDTO {
     private Long orderId;
-    private String orderDate;
-    private Boolean deliveryDone;
-    private Boolean paymentDone;
-    private Boolean refundChangeDone;
+    private LocalDateTime orderDate;
+    private boolean deliveryDone;
+    private boolean paymentDone;
+    private boolean refundChangeDone;
     private List<OrderItemDTO> items;
 }
