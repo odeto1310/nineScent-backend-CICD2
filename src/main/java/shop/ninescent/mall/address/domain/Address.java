@@ -27,7 +27,9 @@ public class Address {
     private User user; // User와 연관 관계
 
     @Column(nullable = false)
-    private String addrName; // 예: "집", "회사"
+    private String addrNicName; // 예: "집", "회사"
+    @Column(nullable = false)
+    private String addrName; // 예: "홍길동"
     @Column(nullable = false)
     private String addrContact;
     @Column(nullable = false)
@@ -36,6 +38,8 @@ public class Address {
     private String addrAddress;
     @Column(nullable = false)
     private String addrDetail;
+    @Column(nullable = true)
+    private String addrExtraDetail;
     @Column(nullable = true)
     private String addrRequest; // 배송 요청 사항
     @Column(nullable = false)
