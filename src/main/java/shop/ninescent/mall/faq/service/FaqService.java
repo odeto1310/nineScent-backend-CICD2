@@ -27,32 +27,19 @@ public class FaqService {
                 .build();
 
         Faq savedFaq = faqRepository.save(faq);
-
-        return FaqResponseDTO.builder()
-                .faqId(savedFaq.getFaqId())
-                .category(savedFaq.getCategory())
-                .title(savedFaq.getTitle())
-                .content(savedFaq.getContent())
-                .regDate(LocalDateTime.now())
-                .build();
+        return toResponseDTO(savedFaq);
     }
 
     public FaqResponseDTO updateFaq(Long faqId, UpdateFaqRequestDTO updateFaqRequestDTO) {
         Faq faq = faqRepository.findById(faqId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 faq가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("해당 FAQ가 존재하지 않습니다."));
 
         faq.setCategory(updateFaqRequestDTO.getCategory());
         faq.setTitle(updateFaqRequestDTO.getTitle());
         faq.setContent(updateFaqRequestDTO.getContent());
 
         Faq updatedFaq = faqRepository.save(faq);
-        return FaqResponseDTO.builder()
-                .faqId(updatedFaq.getFaqId())
-                .category(updatedFaq.getCategory())
-                .title(updatedFaq.getTitle())
-                .content(updatedFaq.getContent())
-                .regDate(updatedFaq.getRegDate())
-                .build();
+        return toResponseDTO(updatedFaq);
     }
 
     public List<String> getAllCategories() {
@@ -69,13 +56,7 @@ public class FaqService {
         Faq faq = faqRepository.findById(faqId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 FAQ가 존재하지 않습니다."));
 
-        return FaqResponseDTO.builder()
-                .faqId(faq.getFaqId())
-                .category(faq.getCategory())
-                .title(faq.getTitle())
-                .content(faq.getContent())
-                .regDate(faq.getRegDate())
-                .build();
+        return toResponseDTO(faq);
     }
 
     public List<FaqResponseDTO> getFaqsByCategory(String category) {
@@ -88,21 +69,24 @@ public class FaqService {
         }
 
         return faqs.stream()
-                .map(faq -> {
-                    FaqResponseDTO faqDTO = new FaqResponseDTO();
-                    faqDTO.setFaqId(faq.getFaqId());
-                    faqDTO.setCategory(faq.getCategory());
-                    faqDTO.setTitle(faq.getTitle());
-                    faqDTO.setContent(faq.getContent());
-                    faqDTO.setRegDate(LocalDateTime.now());
-                    return faqDTO;
-                })
+                .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
 
     public void deleteFaq(Long faqId) {
         Faq faq = faqRepository.findById(faqId)
-                .orElseThrow(() -> new RuntimeException("faq not found"));
+                .orElseThrow(() -> new RuntimeException("해당 FAQ가 존재하지 않습니다"));
+
         faqRepository.deleteById(faqId);
+    }
+
+    private FaqResponseDTO toResponseDTO(Faq faq) {
+        return FaqResponseDTO.builder()
+                .faqId(faq.getFaqId())
+                .category(faq.getCategory())
+                .title(faq.getTitle())
+                .content(faq.getContent())
+                .regDate(faq.getRegDate())
+                .build();
     }
 }

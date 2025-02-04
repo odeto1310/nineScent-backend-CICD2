@@ -43,23 +43,23 @@ public class GetCategoryService {
 
 
     private CategoryResponseDTO toCategoryResponseDTO(Category category) {
-        CategoryResponseDTO dto = new CategoryResponseDTO();
-        dto.setCategoryId(category.getCategoryId());
-        dto.setCategoryName(category.getCategoryName());
-        return dto;
+        return CategoryResponseDTO.builder()
+                .categoryId(category.getCategoryId())
+                .categoryName(category.getCategoryName())
+                .build();
     }
 
     private SubCategoryResponseDTO toSubCategoryResponseDTO(SubCategory subCategory) {
-        SubCategoryResponseDTO dto = new SubCategoryResponseDTO();
-        dto.setSubCategoryId(subCategory.getSubCategoryId());
-        dto.setSubCategoryName(subCategory.getSubCategoryName());
-        return dto;
+        return SubCategoryResponseDTO.builder()
+                .subCategoryId(subCategory.getSubCategoryId())
+                .subCategoryName(subCategory.getSubCategoryName())
+                .build();
     }
 
     private ItemListResponseDTO toItemListResponseDTO(Item item) {
-        ItemListResponseDTO dto = new ItemListResponseDTO();
-        dto.setItemId(item.getItemId());
-        dto.setItemName(item.getItemName());
-        return dto;
+        return ItemListResponseDTO.builder()
+                .itemId(item.getItemId())
+                .itemName(item.getItemName())
+                .build();
     }
 }
