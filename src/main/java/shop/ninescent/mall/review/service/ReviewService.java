@@ -58,7 +58,7 @@ public class ReviewService {
 
     public void deleteReview(Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 QnA가 존재하지 않습니다"));
+                .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 존재하지 않습니다"));
 
         reviewRepository.delete(review);
     }
@@ -71,7 +71,7 @@ public class ReviewService {
                 .rating(review.getRating())
                 .content(review.getContent())
                 .reviewImage(review.getReviewImage())
-                .createdDate(LocalDateTime.now())
+                .createdDate(review.getCreatedDate())
                 .build();
     }
 }
