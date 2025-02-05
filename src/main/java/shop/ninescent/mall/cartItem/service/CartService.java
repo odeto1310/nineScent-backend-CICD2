@@ -9,7 +9,9 @@ import shop.ninescent.mall.cartItem.dto.CartItemDTO;
 import shop.ninescent.mall.cartItem.repository.CartRepository;
 import shop.ninescent.mall.member.domain.User;
 import shop.ninescent.mall.member.repository.UserRepository;
+import shop.ninescent.mall.item.domain.Item;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,8 +37,24 @@ public class CartService {
     public CartDTO getCartByUserNo(Long userNo) {
         Cart cart = getOrCreateCartByUserNo(userNo);
 
-        List<CartItemDTO> cartItems = cart.getCartItems().stream().map(cartItem -> new CartItemDTO(cartItem.getCartItemId(), cartItem.getItem().getItemId(), cartItem.getItem().getItemName(), cartItem.getQuantity(), cartItem.getIsSelected(), null // Action은 필요하지 않음
-        )).collect(Collectors.toList());
+        List<CartItemDTO> cartItems = cart.getCartItems().stream().map(cartItem -> {
+            Item item = cartItem.getItem(); // 상품 정보 가져오기
+
+            return new CartItemDTO(
+                    cartItem.getCartItemId(),
+                    item.getItemId(),
+                    item.getItemName(),
+                    cartItem.getQuantity(),
+                    cartItem.getIsSelected(),
+                    null, // action 값 (필요 시 설정)
+                    item.getItemSize(),
+                    BigDecimal.valueOf(item.getPrice()), // 가격
+                    item.getDiscountRate(),
+                    item.getDiscountedPrice() != null ? BigDecimal.valueOf(item.getDiscountedPrice()) : null,
+                    item.getStock(),
+                    item.getMainPhoto() // ✅ 대표 이미지 추가
+            );
+        }).collect(Collectors.toList());
 
         return new CartDTO(cart.getCartId(), cartItems);
     }
