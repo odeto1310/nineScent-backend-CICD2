@@ -39,10 +39,11 @@ public class QnaService {
                 .collect(Collectors.toList());
     }
 
-    public List<QnaResponseDTO> findById(Long questionId) {
-        return qnaBoardRepository.findById(questionId).stream()
-                .map(this::toResponseDTO)
-                .collect(Collectors.toList());
+    public QnaResponseDTO findById(Long questionId) {
+        QnaBoard qnaBoard = qnaBoardRepository.findById(questionId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 Qna가 존재하지 않습니다."));
+
+        return toResponseDTO(qnaBoard);
     }
 
     public List<QnaResponseDTO> findQnaByUserNo(Long userNo) {

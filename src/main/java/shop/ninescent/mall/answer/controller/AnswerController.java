@@ -23,16 +23,16 @@ public class AnswerController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{questionId}")
+    @GetMapping("/question/{questionId}")
     public ResponseEntity<List<AnswerResponseDTO>> getAnswerByQuestionId(@PathVariable Long questionId) {
         List<AnswerResponseDTO> responseDTOList = answerService.getAnswerByQuestionId(questionId);
         return ResponseEntity.ok(responseDTOList);
     }
 
     @GetMapping("/{answerId}")
-    public ResponseEntity<List<AnswerResponseDTO>> getAnswerById(@PathVariable Long answerId) {
-        List<AnswerResponseDTO> responseDTOList = answerService.getAnswerById(answerId);
-        return ResponseEntity.ok(responseDTOList);
+    public ResponseEntity<AnswerResponseDTO> getAnswerById(@PathVariable Long answerId) {
+        answerService.getAnswerById(answerId);
+        return ResponseEntity.ok(answerService.getAnswerById(answerId));
     }
 
     @DeleteMapping("/{answerId}")

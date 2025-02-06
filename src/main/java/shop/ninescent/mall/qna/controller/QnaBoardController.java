@@ -36,9 +36,9 @@ public class QnaBoardController {
     }
 
     @GetMapping("/{questionId}")
-    public ResponseEntity<List<QnaResponseDTO>> findQnaByQuestionId(@PathVariable Long questionId) {
-        List<QnaResponseDTO> responseDTOList = qnaService.findById(questionId);
-        return ResponseEntity.ok(responseDTOList);
+    public ResponseEntity<QnaResponseDTO> findQnaByQuestionId(@PathVariable Long questionId) {
+        qnaService.findById(questionId);
+        return ResponseEntity.ok(qnaService.findById(questionId));
     }
 
     @PutMapping("/{questionId}")

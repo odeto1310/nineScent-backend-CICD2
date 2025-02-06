@@ -36,9 +36,9 @@ public class ReviewController {
     }
 
     @GetMapping("/{reviewId}")
-    public ResponseEntity<List<ReviewResponseDTO>> findReviewById(@PathVariable Long reviewId) {
-        List<ReviewResponseDTO> responseDTOList = reviewService.findReviewById(reviewId);
-        return ResponseEntity.ok(responseDTOList);
+    public ResponseEntity<ReviewResponseDTO> findReviewById(@PathVariable Long reviewId) {
+        reviewService.findReviewById(reviewId);
+        return ResponseEntity.ok(reviewService.findReviewById(reviewId));
     }
 
     @PutMapping("/{reviewId}")
