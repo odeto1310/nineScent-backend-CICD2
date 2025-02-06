@@ -57,7 +57,7 @@ public class AnswerService {
     public void deleteAnswer(Long answerId) {
         Answer answer = answerRepository.findById(answerId)
                         .orElseThrow(() -> new IllegalArgumentException("해당 답변이 존재하지 않습니다."));
-        answerRepository.deleteById(answerId);
+        answerRepository.delete(answer);
     }
 
     public  AnswerResponseDTO updateAnswer(Long answerId, UpdateAnswerRequestDTO updateAnswerRequestDTO) {
