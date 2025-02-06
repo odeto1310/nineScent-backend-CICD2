@@ -41,10 +41,11 @@ public class AnswerService {
         return toResponse(savedAnswer);
     }
 
-    public List<AnswerResponseDTO> getAnswerById(Long answerId) {
-        return answerRepository.findById(answerId).stream()
-                .map(this::toResponse)
-                .collect(Collectors.toList());
+    public AnswerResponseDTO getAnswerById(Long answerId) {
+        Answer answer = answerRepository.findById(answerId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 답변이 존재하지 않습니다."));
+
+        return toResponse(answer);
     }
 
     @Transactional

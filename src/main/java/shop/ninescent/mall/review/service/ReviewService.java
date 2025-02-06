@@ -38,10 +38,11 @@ public class ReviewService {
                 .collect(Collectors.toList());
     }
 
-    public List<ReviewResponseDTO> findReviewById(Long reviewId) {
-        return reviewRepository.findById(reviewId).stream()
-                .map(this::toResponseDTO)
-                .collect(Collectors.toList());
+    public ReviewResponseDTO findReviewById(Long reviewId) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 review가 존재하지 않습니다."));
+
+        return toResponseDTO(review);
     }
 
     public List<ReviewResponseDTO> findReviewByUserNo(Long userNo) {
