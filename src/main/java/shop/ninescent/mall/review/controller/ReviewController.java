@@ -35,6 +35,12 @@ public class ReviewController {
         return ResponseEntity.ok(responseDTOList);
     }
 
+    @GetMapping("/{reviewId}")
+    public ResponseEntity<List<ReviewResponseDTO>> findReviewById(@PathVariable Long reviewId) {
+        List<ReviewResponseDTO> responseDTOList = reviewService.findReviewById(reviewId);
+        return ResponseEntity.ok(responseDTOList);
+    }
+
     @PutMapping("/{reviewId}")
     public ResponseEntity<ReviewResponseDTO> updateReview(@PathVariable Long reviewId, @RequestBody UpdateReviewRequestDTO updateDTO) {
         ReviewResponseDTO responseDTO = reviewService.updateReview(reviewId, updateDTO);

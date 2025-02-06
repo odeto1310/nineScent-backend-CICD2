@@ -41,6 +41,12 @@ public class AnswerService {
         return toResponse(savedAnswer);
     }
 
+    public List<AnswerResponseDTO> getAnswerById(Long answerId) {
+        return answerRepository.findById(answerId).stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     public List<AnswerResponseDTO> getAnswerByQuestionId(Long questionId) {
         return answerRepository.findByQuestionId(questionId).stream()
@@ -51,7 +57,7 @@ public class AnswerService {
     public void deleteAnswer(Long answerId) {
         Answer answer = answerRepository.findById(answerId)
                         .orElseThrow(() -> new IllegalArgumentException("해당 답변이 존재하지 않습니다."));
-        answerRepository.deleteById(answerId);
+        answerRepository.delete(answer);
     }
 
     public  AnswerResponseDTO updateAnswer(Long answerId, UpdateAnswerRequestDTO updateAnswerRequestDTO) {
