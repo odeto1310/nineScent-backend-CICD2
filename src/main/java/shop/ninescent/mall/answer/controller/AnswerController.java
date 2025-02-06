@@ -25,8 +25,14 @@ public class AnswerController {
 
     @GetMapping("/{questionId}")
     public ResponseEntity<List<AnswerResponseDTO>> getAnswerByQuestionId(@PathVariable Long questionId) {
-        List<AnswerResponseDTO> responses = answerService.getAnswerByQuestionId(questionId);
-        return ResponseEntity.ok(responses);
+        List<AnswerResponseDTO> responseDTOList = answerService.getAnswerByQuestionId(questionId);
+        return ResponseEntity.ok(responseDTOList);
+    }
+
+    @GetMapping("/{answerId}")
+    public ResponseEntity<List<AnswerResponseDTO>> getAnswerById(@PathVariable Long answerId) {
+        List<AnswerResponseDTO> responseDTOList = answerService.getAnswerById(answerId);
+        return ResponseEntity.ok(responseDTOList);
     }
 
     @DeleteMapping("/{answerId}")
@@ -37,8 +43,8 @@ public class AnswerController {
 
     @PutMapping("/{answerId}")
     public ResponseEntity<AnswerResponseDTO> updateAnswer(@PathVariable Long answerId, @RequestBody UpdateAnswerRequestDTO updateDTO) {
-        AnswerResponseDTO responseDTO = answerService.updateAnswer(answerId, updateDTO);
-        return ResponseEntity.ok(responseDTO);
+        AnswerResponseDTO response = answerService.updateAnswer(answerId, updateDTO);
+        return ResponseEntity.ok(response);
     }
 
 }

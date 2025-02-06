@@ -41,6 +41,12 @@ public class AnswerService {
         return toResponse(savedAnswer);
     }
 
+    public List<AnswerResponseDTO> getAnswerById(Long answerId) {
+        return answerRepository.findById(answerId).stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     public List<AnswerResponseDTO> getAnswerByQuestionId(Long questionId) {
         return answerRepository.findByQuestionId(questionId).stream()

@@ -39,6 +39,12 @@ public class QnaService {
                 .collect(Collectors.toList());
     }
 
+    public List<QnaResponseDTO> findById(Long questionId) {
+        return qnaBoardRepository.findById(questionId).stream()
+                .map(this::toResponseDTO)
+                .collect(Collectors.toList());
+    }
+
     public List<QnaResponseDTO> findQnaByUserNo(Long userNo) {
         return qnaBoardRepository.findByUserNo(userNo).stream()
                 .map(this::toResponseDTO)

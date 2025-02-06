@@ -38,6 +38,12 @@ public class ReviewService {
                 .collect(Collectors.toList());
     }
 
+    public List<ReviewResponseDTO> findReviewById(Long reviewId) {
+        return reviewRepository.findById(reviewId).stream()
+                .map(this::toResponseDTO)
+                .collect(Collectors.toList());
+    }
+
     public List<ReviewResponseDTO> findReviewByUserNo(Long userNo) {
         return reviewRepository.findByUserNo(userNo).stream()
                 .map(this::toResponseDTO)
