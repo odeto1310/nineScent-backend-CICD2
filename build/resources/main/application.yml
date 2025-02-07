@@ -5,10 +5,10 @@ spring:
     jdbc:
       initialize-schema: always
   datasource:
-    url: jdbc:mysql://localhost:3306/ninescent
-    username: root
+    url: jdbc:mysql://localhost:3306/ninescent_db
+    username: perfumer
     password: 1234
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto:
