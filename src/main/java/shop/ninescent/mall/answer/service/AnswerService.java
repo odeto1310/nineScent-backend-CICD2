@@ -58,7 +58,14 @@ public class AnswerService {
     public void deleteAnswer(Long answerId) {
         Answer answer = answerRepository.findById(answerId)
                         .orElseThrow(() -> new IllegalArgumentException("해당 답변이 존재하지 않습니다."));
+
+        QnaBoard qnaBoard = qnaRepository.findById(answer.getQuestionId())
+                        .orElseThrow(() -> new IllegalArgumentException("해당 문의가 존재하지 않습니다."));
+
         answerRepository.delete(answer);
+
+        qnaBoard.setDone(false);
+        qnaRepository.save(qnaBoard);
     }
 
     public  AnswerResponseDTO updateAnswer(Long answerId, UpdateAnswerRequestDTO updateAnswerRequestDTO) {
