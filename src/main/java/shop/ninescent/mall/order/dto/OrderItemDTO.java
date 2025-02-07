@@ -12,13 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderItemDTO {
     private Long itemId;
-    private String itemName;
-    private Integer quantity;
-    private Long originalPrice;
-    private Long discountedPrice;
-    private Long userId;
-    private String userName;
-    private Long addressId;
-    private String addressDetail;
-    private Long shippingFee;
+    private int quantity;
+    private long originalPrice;
+    private long discountedPrice;
 }
