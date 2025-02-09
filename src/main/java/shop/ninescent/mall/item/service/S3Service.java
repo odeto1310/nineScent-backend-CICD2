@@ -18,6 +18,8 @@ public class S3Service {
 
     @Value("${cloud.aws.s3.bucketName}")
     private String bucketName;
+    @Value("${cloud.aws.s3.bucketUrl}")
+    private String bucketUrl;
 
     public void uploadFile(MultipartFile multipartFile) throws IOException {
         File file = multiPartFileToFile(multipartFile);
@@ -32,5 +34,9 @@ public class S3Service {
             fileOutputStream.write(file.getBytes());
         }
         return convertedFile;
+    }
+
+    public String makeImgUrl(String item) {
+        return bucketUrl + "/" + item + ".jpg";
     }
 }

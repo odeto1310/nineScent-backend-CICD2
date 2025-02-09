@@ -1,6 +1,7 @@
 package shop.ninescent.mall.item.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +20,12 @@ public class ItemController {
 
     @Autowired
     private S3Service s3Service;
+
+    @GetMapping("/get-img")
+    public ResponseEntity<String> getImgUrl(@RequestParam("item") String item) {
+        return ResponseEntity.ok(s3Service.makeImgUrl(item));
+    }
+
 
     @PostMapping("/upload")
     public ResponseEntity<String> uploadFile(@RequestParam("images") MultipartFile[] files) {
