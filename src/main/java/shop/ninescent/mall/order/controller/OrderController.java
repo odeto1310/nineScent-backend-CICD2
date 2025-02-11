@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.ninescent.mall.order.domain.Orders;
-import shop.ninescent.mall.order.dto.OrderItemDTO;
-import shop.ninescent.mall.order.dto.OrderPrepareRequestDTO;
 import shop.ninescent.mall.order.dto.OrderRequestDTO;
 import shop.ninescent.mall.order.service.OrderService;
 
