@@ -37,4 +37,16 @@ public class Orders {
     private boolean paymentDone;
     @Column(nullable = false)
     private boolean refundChangeDone;
+
+    @Column(nullable = false)
+    private long totalPrice; // 원래 가격 총합
+
+    @Column(nullable = false)
+    private long totalDiscount; // 총 할인 금액
+
+    @Column(nullable = false)
+    private long finalAmount; // 총 결제 금액 (상품 금액 - 할인 + 배송비)
+
+    @Column(nullable = false)
+    private long shippingFee; // 배송비 정보 (10만 원 이상 무료)
 }

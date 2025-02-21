@@ -2,17 +2,15 @@ package shop.ninescent.mall.order.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import shop.ninescent.mall.address.domain.Address;
-import shop.ninescent.mall.item.domain.Item;
-import shop.ninescent.mall.member.domain.User;
+import lombok.NoArgsConstructor;
 
-import java.util.List;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class OrderItemDTO {
-    private Long itemId;
-    private int quantity;
-    private long originalPrice;
-    private long discountedPrice;
+    private Long itemId;  // 상품 ID
+    private int quantity;  // 수량
+    private long originalPrice;  // 원래 가격
+    private long discountedPrice;  // 할인된 가격
 }
