@@ -23,6 +23,8 @@ public class Item {
     @Column(nullable = true)
     private String itemSize;
     @Column(nullable = true)
+    private String itemTitle;
+    @Column(nullable = true)
     private String itemDescription;
     @Column(nullable = false)
     private Long price;
