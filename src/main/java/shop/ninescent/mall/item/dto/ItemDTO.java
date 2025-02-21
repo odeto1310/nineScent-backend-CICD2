@@ -10,7 +10,9 @@ public class ItemDTO {
     private String itemName;          // 상품 이름
     private Integer categoryId;       // 카테고리 ID
     private String itemSize;          // 상품 크기
+    private String itemTitle;
     private String itemDesc;          // 상품 설명
+
     private BigDecimal price;         // 상품 가격
     private Integer discountRate;     // 할인율
     private BigDecimal discountedPrice; // 할인된 가격
@@ -26,7 +28,7 @@ public class ItemDTO {
     }
 
     // 모든 필드 생성자
-    public ItemDTO(Long itemId, Long subCategoryId, String itemName, Integer categoryId, String itemSize, String itemDesc,
+    public ItemDTO(Long itemId, Long subCategoryId, String itemName, Integer categoryId, String itemSize, String itemTitle,String itemDesc,
                    BigDecimal price, Integer discountRate, BigDecimal discountedPrice, LocalDate discountStart,
                    LocalDate discountEnd, String discountDesc, Integer stock, String photo, String detail) {
         this.itemId = itemId;
@@ -34,6 +36,7 @@ public class ItemDTO {
         this.itemName = itemName;
         this.categoryId = categoryId;
         this.itemSize = itemSize;
+        this.itemTitle = itemTitle;
         this.itemDesc = itemDesc;
         this.price = price;
         this.discountRate = discountRate;
@@ -86,6 +89,10 @@ public class ItemDTO {
     public void setItemSize(String itemSize) {
         this.itemSize = itemSize;
     }
+
+    public String getItemTitle() {return itemTitle;}
+
+    public void setItemTitle(String itemTitle) {this.itemTitle = itemTitle;}
 
     public String getItemDesc() {
         return itemDesc;
@@ -175,6 +182,7 @@ public class ItemDTO {
                 ", itemName='" + itemName + '\'' +
                 ", categoryId=" + categoryId +
                 ", itemSize='" + itemSize + '\'' +
+                ", itemTitle='" + itemTitle + '\'' +
                 ", itemDesc='" + itemDesc + '\'' +
                 ", price=" + price +
                 ", discountRate=" + discountRate +
