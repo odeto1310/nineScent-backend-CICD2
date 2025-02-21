@@ -2,6 +2,8 @@ package shop.ninescent.mall.review.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import shop.ninescent.mall.member.domain.User;
+import shop.ninescent.mall.member.repository.UserRepository;
 import shop.ninescent.mall.review.dto.ReviewRequestDTO;
 import shop.ninescent.mall.review.dto.ReviewResponseDTO;
 import shop.ninescent.mall.review.domain.Review;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
+    private final UserRepository userRepository;
 
     public ReviewResponseDTO createReview(ReviewRequestDTO reviewRequestDTO) {
         Review review = Review.builder()
@@ -71,10 +74,15 @@ public class ReviewService {
     }
 
     private ReviewResponseDTO toResponseDTO(Review review) {
+        String name = userRepository.findByUserNo(review.getUserNo())
+                .map(User::getName)
+                .orElse("Null");
+
         return ReviewResponseDTO.builder()
                 .reviewId(review.getReviewId())
                 .itemId(review.getItemId())
                 .userNo(review.getUserNo())
+                .name(name)
                 .rating(review.getRating())
                 .content(review.getContent())
                 .reviewImage(review.getReviewImage())

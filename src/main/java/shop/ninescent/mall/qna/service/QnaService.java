@@ -2,6 +2,8 @@ package shop.ninescent.mall.qna.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import shop.ninescent.mall.member.domain.User;
+import shop.ninescent.mall.member.repository.UserRepository;
 import shop.ninescent.mall.qna.dto.QnaRequestDTO;
 import shop.ninescent.mall.qna.dto.QnaResponseDTO;
 import shop.ninescent.mall.qna.domain.QnaBoard;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 public class QnaService {
 
     private final QnaBoardRepository qnaBoardRepository;
+    private final UserRepository userRepository;
 
     public QnaResponseDTO createQna(QnaRequestDTO qnaRequestDTO) {
         QnaBoard qnaBoard = QnaBoard.builder()
@@ -72,10 +75,15 @@ public class QnaService {
     }
 
     private QnaResponseDTO toResponseDTO(QnaBoard qnaBoard) {
+        String name = userRepository.findByUserNo(qnaBoard.getUserNo())
+                .map(User::getName)
+                .orElse("Null");
+
         return QnaResponseDTO.builder()
                 .questionId(qnaBoard.getQuestionId())
                 .itemId(qnaBoard.getItemId())
                 .userNo(qnaBoard.getUserNo())
+                .name(name)
                 .qnaCategory(qnaBoard.getQnaCategory())
                 .content(qnaBoard.getContent())
                 .isDone(qnaBoard.isDone())
