@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 import shop.ninescent.mall.item.domain.Item;
 
 import java.time.LocalDateTime;
@@ -18,7 +19,8 @@ public class CartItem {
 
     @ManyToOne
     @JoinColumn(name = "cart_id", nullable = false)
-    @JsonBackReference // Prevents serialization of cart reference
+    @JsonBackReference // Prevents serialization of cart reference  -- JSON 직렬화 시 순환 참조 방지
+    @ToString.Exclude  // 순환 참조 방지
     private Cart cart; // Cart와 ManyToOne 관계
 
     @ManyToOne

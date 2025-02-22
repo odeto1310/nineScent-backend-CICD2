@@ -13,6 +13,7 @@ public class CartItemDTO {
     private Long itemId;
     private String itemName;
     private Integer quantity;
+    private Integer stock;
     private Boolean isSelected;
     @JsonProperty("action")
     private String action;

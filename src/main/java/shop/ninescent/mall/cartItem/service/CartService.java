@@ -40,6 +40,7 @@ public class CartService {
                         cartItem.getItem().getItemId(),
                         cartItem.getItem().getItemName(),
                         cartItem.getQuantity(),
+                        cartItem.getItem().getStock(),
                         cartItem.getIsSelected(),
                         null, // Action 필요 없음
                         cartItem.getItem().getPrice(), // 가격 추가
