@@ -39,12 +39,6 @@ public class CartController {
     @PostMapping("/add/{userNo}")
     public ResponseEntity<String> addItemToCart(@PathVariable Long userNo, @RequestBody CartItemDTO cartItemDTO) {
         try {
-            // ✅ 로그 추가
-            System.out.println("Received userNo: " + userNo);
-            System.out.println("Received cartItemDTO: " + cartItemDTO);
-            System.out.println("Item ID: " + cartItemDTO.getItemId() + ", Quantity: " + cartItemDTO.getQuantity());
-
-
             cartItemService.addItemToCart(userNo, cartItemDTO.getItemId(), cartItemDTO.getQuantity());
             return ResponseEntity.ok("Item added to the cart");
         } catch (Exception e) {

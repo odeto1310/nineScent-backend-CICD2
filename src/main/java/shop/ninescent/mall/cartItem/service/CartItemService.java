@@ -2,6 +2,8 @@ package shop.ninescent.mall.cartItem.service;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.ninescent.mall.cartItem.domain.Cart;
@@ -17,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CartItemService {
 
+    private static final Logger log = LoggerFactory.getLogger(CartItemService.class);
     private final CartItemRepository cartItemRepository;
     private final CartService cartService;
     private final ItemRepository itemRepository;
@@ -36,8 +39,11 @@ public class CartItemService {
 
         CartItem existingCartItem = cartItemRepository.findByCartAndItem(cart, item);
         if (existingCartItem != null) {
+            System.out.println("****************************Item already exists: " + existingCartItem);
             existingCartItem.setQuantity(existingCartItem.getQuantity() + quantity);
+            cartItemRepository.save(existingCartItem);
         } else {
+            System.out.println("****************************Item not found: " + item);
             CartItem cartItem = new CartItem();
             cartItem.setCart(cart);
             cartItem.setItem(item);
