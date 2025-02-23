@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderItemDTO {
+    private int orderItemId;
+    private String itemName;
     private Long itemId;  // 상품 ID
     private int quantity;  // 수량
     private long originalPrice;  // 원래 가격

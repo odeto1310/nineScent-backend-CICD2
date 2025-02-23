@@ -26,13 +26,4 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/{orderId}")
-    public ResponseEntity<?> getOrderDetail(@PathVariable Long orderId) {
-        try {
-            Orders order = orderService.getOrderDetail(orderId);
-            return ResponseEntity.ok(order);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("주문을 찾을 수 없습니다.");
-        }
-    }
 }

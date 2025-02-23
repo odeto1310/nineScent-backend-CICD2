@@ -73,9 +73,4 @@ public class OrderService {
         order.setOrderItems(orderItems);
         return orderRepository.save(order);
     }
-
-    public Orders getOrderDetail(Long orderId) {
-        return orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("주문 정보 없음"));
-    }
 }
