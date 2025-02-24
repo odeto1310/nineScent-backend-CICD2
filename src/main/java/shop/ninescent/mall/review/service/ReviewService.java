@@ -11,7 +11,9 @@ import shop.ninescent.mall.review.dto.UpdateReviewRequestDTO;
 import shop.ninescent.mall.review.repository.ReviewRepository;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -71,6 +73,28 @@ public class ReviewService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 존재하지 않습니다"));
 
         reviewRepository.delete(review);
+    }
+
+    public Double getAverageRating(Long itemId) {
+        Double avgRating = reviewRepository.getAverageRating(itemId);
+        return avgRating == null ? 0 : Math.round(avgRating * 10) / 10.0;
+    }
+
+    public Map<Integer, Long> getRatingCounts(Long itemId) {
+        List<Object[]> result = reviewRepository.getRatingCounts(itemId);
+        Map<Integer, Long> ratingCounts = new HashMap<>();
+
+        for (int i = 1; i <= 5; i++) {
+            ratingCounts.put(i, 0L);
+        }
+
+        for (Object[] row : result) {
+            Integer rating = (Integer) row[0];
+            Long count = (Long) row[1];
+            ratingCounts.put(rating, count);
+        }
+
+        return ratingCounts;
     }
 
     private ReviewResponseDTO toResponseDTO(Review review) {
