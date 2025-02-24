@@ -9,6 +9,7 @@ import shop.ninescent.mall.review.dto.UpdateReviewRequestDTO;
 import shop.ninescent.mall.review.service.ReviewService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/review")
@@ -51,6 +52,18 @@ public class ReviewController {
     public ResponseEntity<ReviewResponseDTO> deleteReview(@PathVariable Long reviewId) {
         reviewService.deleteReview(reviewId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/rating/{itemId}")
+    public ResponseEntity<Double> getAverageRating(@PathVariable Long itemId) {
+        Double averageRating = reviewService.getAverageRating(itemId);
+        return ResponseEntity.ok(averageRating);
+    }
+
+    @GetMapping("/rating-count/{itemId}")
+    public ResponseEntity<Map<Integer, Long>> getRatingCounts(@PathVariable Long itemId) {
+        Map<Integer, Long> ratingCounts = reviewService.getRatingCounts(itemId);
+        return ResponseEntity.ok(ratingCounts);
     }
 }
 

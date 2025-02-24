@@ -2,6 +2,8 @@ package shop.ninescent.mall.review.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import shop.ninescent.mall.member.domain.User;
+import shop.ninescent.mall.member.repository.UserRepository;
 import shop.ninescent.mall.review.dto.ReviewRequestDTO;
 import shop.ninescent.mall.review.dto.ReviewResponseDTO;
 import shop.ninescent.mall.review.domain.Review;
@@ -9,7 +11,9 @@ import shop.ninescent.mall.review.dto.UpdateReviewRequestDTO;
 import shop.ninescent.mall.review.repository.ReviewRepository;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -17,6 +21,7 @@ import java.util.stream.Collectors;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
+    private final UserRepository userRepository;
 
     public ReviewResponseDTO createReview(ReviewRequestDTO reviewRequestDTO) {
         Review review = Review.builder()
@@ -70,11 +75,38 @@ public class ReviewService {
         reviewRepository.delete(review);
     }
 
+    public Double getAverageRating(Long itemId) {
+        Double avgRating = reviewRepository.getAverageRating(itemId);
+        return avgRating == null ? 0 : Math.round(avgRating * 10) / 10.0;
+    }
+
+    public Map<Integer, Long> getRatingCounts(Long itemId) {
+        List<Object[]> result = reviewRepository.getRatingCounts(itemId);
+        Map<Integer, Long> ratingCounts = new HashMap<>();
+
+        for (int i = 1; i <= 5; i++) {
+            ratingCounts.put(i, 0L);
+        }
+
+        for (Object[] row : result) {
+            Integer rating = (Integer) row[0];
+            Long count = (Long) row[1];
+            ratingCounts.put(rating, count);
+        }
+
+        return ratingCounts;
+    }
+
     private ReviewResponseDTO toResponseDTO(Review review) {
+        String name = userRepository.findByUserNo(review.getUserNo())
+                .map(User::getName)
+                .orElse("Null");
+
         return ReviewResponseDTO.builder()
                 .reviewId(review.getReviewId())
                 .itemId(review.getItemId())
                 .userNo(review.getUserNo())
+                .name(name)
                 .rating(review.getRating())
                 .content(review.getContent())
                 .reviewImage(review.getReviewImage())

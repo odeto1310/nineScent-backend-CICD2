@@ -19,6 +19,8 @@ public class ReviewResponseDTO {
 
     private Long userNo;
 
+    private String name;
+
     private int rating;
 
     private String content;
