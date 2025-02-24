@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface AddressRepository extends JpaRepository<Address, Long> {
     Optional<Address> findByUserUserNoAndIsDefaultTrue(Long userNo);
 
-    List<Address> findAllByUserUserNo(Long userNo);
+    List<Address> findByUser_UserNoAndIsDeletedFalse(Long userNo);
 
     Optional<Address> findByAddrNo(Long addrNo);
 

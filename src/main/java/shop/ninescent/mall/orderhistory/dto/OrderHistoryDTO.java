@@ -9,12 +9,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 public class OrderHistoryDTO {
-    private Long orderId;
+    private long orderId;
     private LocalDateTime orderDate;
-    private boolean deliveryDone;
-    private boolean paymentDone;
-    private boolean refundChangeDone;
-    private List<OrderItemDTO> items;
+    private String orderStatus;  // 주문 상태 (결제완료, 배송중 등)
+    private long finalAmount; // 총 결제 금액
+    private long shippingFee; // 배송비
+    private List<OrderItemDTO> orderItems;
 }

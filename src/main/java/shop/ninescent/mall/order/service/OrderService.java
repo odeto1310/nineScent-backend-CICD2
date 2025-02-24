@@ -5,27 +5,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.ninescent.mall.address.domain.Address;
 import shop.ninescent.mall.address.repository.AddressRepository;
-import shop.ninescent.mall.cartItem.domain.Cart;
-import shop.ninescent.mall.cartItem.domain.CartItem;
-import shop.ninescent.mall.cartItem.repository.CartRepository;
+import shop.ninescent.mall.cartItem.service.CartItemService;
+import shop.ninescent.mall.cartItem.service.CartService;
 import shop.ninescent.mall.item.domain.Item;
 import shop.ninescent.mall.item.repository.ItemRepository;
 import shop.ninescent.mall.member.domain.User;
 import shop.ninescent.mall.member.repository.UserRepository;
 import shop.ninescent.mall.order.domain.OrderItems;
 import shop.ninescent.mall.order.domain.Orders;
-import shop.ninescent.mall.order.domain.StockLog;
-import shop.ninescent.mall.order.dto.OrderItemDTO;
 import shop.ninescent.mall.order.dto.OrderRequestDTO;
 import shop.ninescent.mall.order.repository.OrderRepository;
-import shop.ninescent.mall.order.repository.StockLogRepository;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,6 +27,7 @@ public class OrderService {
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
     private final ItemRepository itemRepository;
+    private final CartItemService cartItemService;
 
     @Transactional
     public Orders createOrder(OrderRequestDTO orderRequest) {
@@ -51,6 +44,11 @@ public class OrderService {
         order.setRefundChangeDone(false);
         order.setOrderDate(LocalDateTime.now());
 
+        order.setTotalPrice(orderRequest.getTotalPrice());
+        order.setTotalDiscount(orderRequest.getTotalDiscount());
+        order.setFinalAmount(orderRequest.getFinalAmount());
+        order.setShippingFee(orderRequest.getShippingFee());
+
         List<OrderItems> orderItems = orderRequest.getOrderItems().stream()
                 .map(itemDTO -> {
                     Item item = itemRepository.findById(itemDTO.getItemId())
@@ -62,6 +60,11 @@ public class OrderService {
                     orderItem.setQuantity(itemDTO.getQuantity());
                     orderItem.setOriginalPrice(itemDTO.getOriginalPrice());
                     orderItem.setDiscountedPrice(itemDTO.getDiscountedPrice());
+                    // 카트에서 해당 아이템 삭제
+
+                    System.out.println("🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴 Removing item from cart: " + itemDTO.getItemId());
+                    cartItemService.removeItemFromCart(orderRequest.getUserNo(), itemDTO.getItemId());
+
 
                     return orderItem;
                 })
@@ -69,10 +72,5 @@ public class OrderService {
 
         order.setOrderItems(orderItems);
         return orderRepository.save(order);
-    }
-
-    public Orders getOrderDetail(Long orderId) {
-        return orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("주문 정보 없음"));
     }
 }

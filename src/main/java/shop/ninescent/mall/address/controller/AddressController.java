@@ -37,7 +37,7 @@ public class AddressController {
     // 사용자 모든 주소 가져오기
     @GetMapping("/list/{userNo}")
     public ResponseEntity<List<AddressDTO>> getAllAddresses(@PathVariable Long userNo) {
-        List<AddressDTO> addresses = addressService.getAddresses(userNo);
+        List<AddressDTO> addresses = addressService.getAllAddresses(userNo);
         return ResponseEntity.ok(addresses);
     }
     // 특정 주소 가져오기

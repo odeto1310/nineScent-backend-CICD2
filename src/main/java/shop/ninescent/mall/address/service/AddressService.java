@@ -48,8 +48,8 @@ public class AddressService {
                 .orElseThrow(() -> new IllegalArgumentException("Default address not found"));
     }
 
-    public List<AddressDTO> getAddresses(Long userNo) {
-        return addressRepository.findAllByUserUserNo(userNo).stream()
+    public List<AddressDTO> getAllAddresses(Long userNo) {
+        return addressRepository.findByUser_UserNoAndIsDeletedFalse(userNo).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -83,7 +83,7 @@ public class AddressService {
 
     // Default값 변경
     public void setDefaultAddress(Long addrNo, Long userNo) {
-        List<Address> userAddresses = addressRepository.findAllByUserUserNo(userNo);
+        List<Address> userAddresses = addressRepository.findByUser_UserNoAndIsDeletedFalse(userNo);
 
         // 모든 주소의 isDefault를 false로 설정
         userAddresses.forEach(address -> {
@@ -109,7 +109,9 @@ public class AddressService {
         if(address.getIsDefault()) {
             throw new IllegalStateException("Default address cannot be deleted.");
         }
-        addressRepository.delete(address);
+        // 실제 삭제가 아닌 논리 삭제 처리
+        address.setIsDeleted(true);
+        addressRepository.save(address);
     }
 
 //    // Liked값 변경
