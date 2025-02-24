@@ -50,4 +50,7 @@ public class Address {
     private Boolean isExtraFee; // 배송 추가비 여부
     @Column(nullable = true)
     private LocalDateTime lastUsed; // 마지막 사용 시간
+    @Column(nullable = false)
+    @Builder.Default
+    private Boolean isDeleted = false; // 논리적 삭제 컬럼 추가
 }
