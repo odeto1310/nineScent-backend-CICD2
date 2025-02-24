@@ -240,3 +240,4 @@ SELECT * FROM users;
 SELECT * FROM orders;
 SELECT * FROM order_items;
 SELECT * FROM cart_item;
+SELECT * FROM address;
