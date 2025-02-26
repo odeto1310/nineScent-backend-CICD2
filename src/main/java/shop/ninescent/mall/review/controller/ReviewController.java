@@ -1,6 +1,9 @@
 package shop.ninescent.mall.review.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.ninescent.mall.review.dto.ReviewRequestDTO;
@@ -28,6 +31,11 @@ public class ReviewController {
     public ResponseEntity<List<ReviewResponseDTO>> findReviewByItemId(@PathVariable Long itemId) {
         List<ReviewResponseDTO> responseDTOList = reviewService.findReviewByItemId(itemId);
         return ResponseEntity.ok(responseDTOList);
+    }
+
+    @GetMapping("/list/{itemId}")
+    public Page<ReviewResponseDTO> findReviewByItemId(@PathVariable Long itemId, @PageableDefault(size = 5) Pageable pageable) {
+        return reviewService.findReviewByPage(itemId, pageable);
     }
 
     @GetMapping("/user/{userNo}")

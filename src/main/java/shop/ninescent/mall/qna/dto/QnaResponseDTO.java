@@ -19,6 +19,8 @@ public class QnaResponseDTO {
 
     private Long userNo;
 
+    private String title;
+
     private String name;
 
     private String qnaCategory;
