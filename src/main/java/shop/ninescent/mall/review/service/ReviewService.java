@@ -1,6 +1,8 @@
 package shop.ninescent.mall.review.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import shop.ninescent.mall.member.domain.User;
 import shop.ninescent.mall.member.repository.UserRepository;
@@ -54,6 +56,10 @@ public class ReviewService {
         return reviewRepository.findByUserNo(userNo).stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
+    }
+
+    public Page<ReviewResponseDTO> findReviewByPage(Long itemId, Pageable pageable) {
+        return reviewRepository.findByItemId(itemId, pageable).map(this::toResponseDTO);
     }
 
     public ReviewResponseDTO updateReview(Long reviewId, UpdateReviewRequestDTO updateDTO) {

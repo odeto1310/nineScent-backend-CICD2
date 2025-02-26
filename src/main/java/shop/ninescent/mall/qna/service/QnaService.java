@@ -1,6 +1,9 @@
 package shop.ninescent.mall.qna.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import shop.ninescent.mall.member.domain.User;
 import shop.ninescent.mall.member.repository.UserRepository;
@@ -26,6 +29,7 @@ public class QnaService {
                 .itemId(qnaRequestDTO.getItemId())
                 .userNo(qnaRequestDTO.getUserNo())
                 .qnaCategory(qnaRequestDTO.getQnaCategory())
+                .title(qnaRequestDTO.getTitle())
                 .content(qnaRequestDTO.getContent())
                 .attachment(qnaRequestDTO.getAttachment())
                 .isDone(false)
@@ -40,6 +44,10 @@ public class QnaService {
         return qnaBoardRepository.findByItemId(itemId).stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
+    }
+
+    public Page<QnaResponseDTO> findQnaByPage(Long itemId, Pageable pageable) {
+        return qnaBoardRepository.findByItemId(itemId, pageable).map(this::toResponseDTO);
     }
 
     public QnaResponseDTO findById(Long questionId) {
@@ -60,6 +68,7 @@ public class QnaService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 QnA가 존재하지 않습니다."));
 
         qnaBoard.setQnaCategory(updateDTO.getQnaCategory());
+        qnaBoard.setTitle(updateDTO.getTitle());
         qnaBoard.setContent(updateDTO.getContent());
         qnaBoard.setAttachment(updateDTO.getAttachment());
 
@@ -85,6 +94,7 @@ public class QnaService {
                 .userNo(qnaBoard.getUserNo())
                 .name(name)
                 .qnaCategory(qnaBoard.getQnaCategory())
+                .title(qnaBoard.getTitle())
                 .content(qnaBoard.getContent())
                 .isDone(qnaBoard.isDone())
                 .attachment(qnaBoard.getAttachment())
