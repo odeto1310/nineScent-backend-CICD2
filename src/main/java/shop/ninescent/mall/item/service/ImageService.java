@@ -58,12 +58,11 @@ public class ImageService {
     public String uploadImage(MultipartFile file, Long categoryId, String itemName, String imageType) throws IOException {
         String categoryName = getCategoryNameById(categoryId);
         File convertedFile = convertMultipartFileToFile(file);
-        String fileName = String.format("%s/%s/%s/%s.jpg", categoryName, itemName, imageType, System.currentTimeMillis());
+        String fileName = String.format("%s/%s/%s.jpg", categoryName, itemName, imageType);
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(file.getContentType());
 
-        // ✅ ACL 없이 업로드 (withCannedAcl 제거)
         PutObjectRequest putRequest = new PutObjectRequest(bucketName, fileName, convertedFile)
                 .withMetadata(metadata);
 
