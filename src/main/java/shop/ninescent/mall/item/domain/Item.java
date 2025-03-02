@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter
@@ -15,23 +16,24 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long itemId;
     @Column(nullable = false)
+    private Long categoryId;
+    @Column(nullable = false)
     private Long subCategoryId;
     @Column(nullable = false)
     private String itemName;
-    @Column(nullable = false)
-    private Integer categoryId;
     @Column(nullable = true)
     private String itemSize;
     @Column(nullable = true)
     private String itemTitle;
     @Column(nullable = true)
     private String itemDescription;
+
     @Column(nullable = false)
-    private Long price;
+    private BigDecimal price;
     @Column(nullable = true)
     private Integer discountRate; // 할인율
     @Column(nullable = true)
-    private Long discountedPrice;
+    private BigDecimal discountedPrice;
     @Column(nullable = true)
     private LocalDate discountStart;
     @Column(nullable = true)

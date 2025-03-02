@@ -21,6 +21,9 @@ public class S3Service {
     @Value("${cloud.aws.s3.bucketUrl}")
     private String bucketUrl;
 
+
+
+
     public void uploadFile(MultipartFile multipartFile) throws IOException {
         File file = multiPartFileToFile(multipartFile);
         String fileName = System.currentTimeMillis() + "_" + multipartFile.getOriginalFilename();

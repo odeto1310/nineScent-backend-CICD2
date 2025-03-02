@@ -3,12 +3,14 @@ package shop.ninescent.mall.item.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import shop.ninescent.mall.item.domain.Item;
+
 public class ItemDTO {
 
     private Long itemId;              // 상품 ID
+    private Long categoryId;       // 카테고리 ID
     private Long subCategoryId;       // 서브 카테고리 ID
     private String itemName;          // 상품 이름
-    private Integer categoryId;       // 카테고리 ID
     private String itemSize;          // 상품 크기
     private String itemTitle;
     private String itemDesc;          // 상품 설명
@@ -21,14 +23,14 @@ public class ItemDTO {
     private String discountDesc;      // 할인 설명
     private Integer stock;            // 재고
     private String photo;             // 사진 URL
-    private String detail;            // 상세 설명
+    private String detail;            // 상세 설명 사진
 
     // 기본 생성자
     public ItemDTO() {
     }
 
     // 모든 필드 생성자
-    public ItemDTO(Long itemId, Long subCategoryId, String itemName, Integer categoryId, String itemSize, String itemTitle,String itemDesc,
+    public ItemDTO(Long itemId, Long subCategoryId, String itemName, Long categoryId, String itemSize, String itemTitle,String itemDesc,
                    BigDecimal price, Integer discountRate, BigDecimal discountedPrice, LocalDate discountStart,
                    LocalDate discountEnd, String discountDesc, Integer stock, String photo, String detail) {
         this.itemId = itemId;
@@ -74,11 +76,11 @@ public class ItemDTO {
         this.itemName = itemName;
     }
 
-    public Integer getCategoryId() {
+    public Long getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(Integer categoryId) {
+    public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
     }
 
@@ -195,4 +197,30 @@ public class ItemDTO {
                 ", detail='" + detail + '\'' +
                 '}';
     }
+
+    //itemDTOdㅔ서 Item 엔터티 변환
+    public Item toEntity() {
+        Item item = new Item();
+        item.setItemId(this.itemId);
+        item.setCategoryId(this.categoryId);
+        item.setSubCategoryId(this.subCategoryId);
+        item.setItemName(this.itemName);
+
+        item.setItemSize(this.itemSize);
+        item.setItemTitle(this.itemTitle);
+        item.setItemDescription(this.itemDesc);
+        item.setPrice(this.price);
+        item.setDiscountRate(this.discountRate);
+        item.setDiscountedPrice(this.discountedPrice);
+        item.setDiscountStart(this.discountStart);
+        item.setDiscountEnd(this.discountEnd);
+        item.setDiscountDescription(this.discountDesc);
+        item.setStock(this.stock);
+        item.setMainPhoto(this.photo);
+        item.setDetailPhoto(this.detail);
+        return item;
+    }
+
+
+
 }
