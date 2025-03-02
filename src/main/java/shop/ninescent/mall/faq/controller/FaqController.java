@@ -1,6 +1,9 @@
 package shop.ninescent.mall.faq.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.ninescent.mall.faq.dto.FaqRequestDTO;
@@ -43,6 +46,11 @@ public class FaqController {
     @GetMapping("/category/{category}")
     public List<FaqResponseDTO> getFaqsByCategory(@PathVariable String category) {
         return faqService.getFaqsByCategory(category);
+    }
+
+    @GetMapping("/list/{category}")
+    public Page<FaqResponseDTO> getFaqsByCategory(@PathVariable String category, @PageableDefault Pageable pageable) {
+        return faqService.getFaqByPage(category, pageable);
     }
 
     @DeleteMapping("/{faqId}")
