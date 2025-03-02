@@ -1,6 +1,8 @@
 package shop.ninescent.mall.faq.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import shop.ninescent.mall.faq.domain.Faq;
 import shop.ninescent.mall.faq.dto.FaqRequestDTO;
@@ -71,6 +73,18 @@ public class FaqService {
         return faqs.stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
+    }
+
+    public Page<FaqResponseDTO> getFaqByPage(String category, Pageable pageable) {
+        Page<Faq> faqs;
+
+        if ("all".equals(category)) {
+            faqs = faqRepository.findAll(pageable);
+        } else {
+            faqs = faqRepository.findByCategory(category, pageable);
+        }
+
+        return faqs.map(this::toResponseDTO);
     }
 
     public void deleteFaq(Long faqId) {
