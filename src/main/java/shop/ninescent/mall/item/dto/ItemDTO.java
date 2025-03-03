@@ -2,6 +2,7 @@ package shop.ninescent.mall.item.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Collections;
 
 import shop.ninescent.mall.item.domain.Item;
 
@@ -217,7 +218,7 @@ public class ItemDTO {
         item.setDiscountDescription(this.discountDesc);
         item.setStock(this.stock);
         item.setMainPhoto(this.photo);
-        item.setDetailPhoto(this.detail);
+        item.setDetailPhotos(Collections.singletonList(this.detail));
         return item;
     }
 
