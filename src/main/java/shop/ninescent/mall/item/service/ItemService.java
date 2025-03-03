@@ -39,14 +39,14 @@ public class ItemService {
 //    }
 
     public Item createItem(ItemDTO itemDTO, MultipartFile mainImage, List<MultipartFile> detailImages) throws IOException {
-        // 📌 메인 이미지 업로드
+        // 메인 이미지 업로드
         String mainImageUrl = null;
         if (mainImage != null && !mainImage.isEmpty()) {
             ImageRequestDTO request = new ImageRequestDTO(ImageCategory.PRODUCT, itemDTO.getCategoryId(), itemDTO.getItemName(), "main");
             mainImageUrl = productImageService.uploadImage(mainImage, request);
         }
 
-        // 📌 상세 이미지 업로드
+        // 상세 이미지 업로드
         List<String> detailImageUrls = null;
         if (detailImages != null && !detailImages.isEmpty()) {
             detailImageUrls = detailImages.stream()
@@ -75,7 +75,7 @@ public class ItemService {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
 
-        // 📌 이미지 삭제
+        // 이미지 삭제
         if (item.getMainPhoto() != null) {
             ImageRequestDTO request = new ImageRequestDTO(ImageCategory.PRODUCT, item.getCategoryId(), item.getItemName(), "main");
             productImageService.deleteImage(request);
@@ -88,7 +88,7 @@ public class ItemService {
             }
         }
 
-        // 📌 상품 삭제
+        // 상품 삭제
         itemRepository.delete(item);
     }
 }
