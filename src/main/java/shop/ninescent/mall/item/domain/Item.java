@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,7 +18,7 @@ public class Item {
     private Long itemId;
     @Column(nullable = false)
     private Long categoryId;
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Long subCategoryId;
     @Column(nullable = false)
     private String itemName;
@@ -44,6 +45,6 @@ public class Item {
     private int stock;
     @Column(nullable = true)
     private String mainPhoto;
-    @Column(nullable = true)
-    private String detailPhoto;
+    @ElementCollection  // ✅ 여러 개의 상세 이미지 URL을 저장할 수 있도록 설정
+    private List<String> detailPhotos;
 }

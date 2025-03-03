@@ -12,12 +12,12 @@ import shop.ninescent.mall.item.service.ItemService;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/api/images")
-public class ImageController {
+@RequestMapping("/api/image")
+public class S3Controller {
     private final ImageService imageService;
     private final ItemService itemService;
 
-    public ImageController(ImageService imageService, ItemService itemService) {
+    public S3Controller(ImageService imageService, ItemService itemService) {
         this.imageService = imageService;
         this.itemService = itemService;
     }
