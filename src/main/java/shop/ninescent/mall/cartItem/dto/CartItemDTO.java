@@ -22,4 +22,5 @@ public class CartItemDTO {
     private BigDecimal price; //  상품 가격 추가
     private String description; //  상품 설명 추가
     private String mainPhoto; //  상품 대표 이미지 추가
+    private String itemSize; //아이템 사이즈
 }

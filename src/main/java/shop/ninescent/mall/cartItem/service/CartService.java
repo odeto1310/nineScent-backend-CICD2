@@ -45,7 +45,8 @@ public class CartService {
                         null, // Action 필요 없음
                         cartItem.getItem().getPrice(), // 가격 추가
                         cartItem.getItem().getItemDescription(), // 설명 추가
-                        cartItem.getItem().getMainPhoto() // 대표 이미지 추가
+                        cartItem.getItem().getMainPhoto(), // 대표 이미지 추가
+                        cartItem.getItem().getItemSize()
                 ))
                 .collect(Collectors.toList());
 
