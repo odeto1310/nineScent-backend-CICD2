@@ -26,6 +26,21 @@ public class ItemService {
         return itemRepository.findAll();
     }
 
+    // 특정 카테고리의 아이템 조회
+    public List<Item> getItemsByCategory(Long categoryId) {
+        return itemRepository.findByCategoryId(categoryId);
+    }
+
+    // 특정 하위 카테고리의 아이템 조회
+    public List<Item> getItemsBySubCategory(Long subCategoryId) {
+        return itemRepository.findBySubCategoryId(subCategoryId);
+    }
+
+    // 특정 카테고리 + 하위 카테고리 아이템 조회
+    public List<Item> getItemsByCategoryAndSubCategory(Long categoryId, Long subCategoryId) {
+        return itemRepository.findByCategoryIdAndSubCategoryId(categoryId, subCategoryId);
+    }
+
     public Item getItemById(Long id) {
         return itemRepository.findById(id).orElseThrow(() -> new RuntimeException("Item not found"));
     }
@@ -39,14 +54,14 @@ public class ItemService {
 //    }
 
     public Item createItem(ItemDTO itemDTO, MultipartFile mainImage, List<MultipartFile> detailImages) throws IOException {
-        // 메인 이미지 업로드
+        //메인 이미지 업로드
         String mainImageUrl = null;
         if (mainImage != null && !mainImage.isEmpty()) {
             ImageRequestDTO request = new ImageRequestDTO(ImageCategory.PRODUCT, itemDTO.getCategoryId(), itemDTO.getItemName(), "main");
             mainImageUrl = productImageService.uploadImage(mainImage, request);
         }
 
-        // 상세 이미지 업로드
+        //상세 이미지 업로드
         List<String> detailImageUrls = null;
         if (detailImages != null && !detailImages.isEmpty()) {
             detailImageUrls = detailImages.stream()
@@ -61,7 +76,7 @@ public class ItemService {
                     .collect(Collectors.toList());
         }
 
-        // 📌 Item 엔티티 생성 및 저장
+        //Item 엔티티 생성 및 저장
         Item item = itemDTO.toEntity();
         item.setMainPhoto(mainImageUrl);
         item.setDetailPhotos(detailImageUrls);
@@ -69,7 +84,7 @@ public class ItemService {
     }
 
     /**
-     * ✅ 상품 삭제 (이미지도 함께 삭제)
+     *상품 삭제 (이미지도 함께 삭제)
      */
     public void deleteItem(Long itemId) {
         Item item = itemRepository.findById(itemId)
