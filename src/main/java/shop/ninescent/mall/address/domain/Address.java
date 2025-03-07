@@ -39,7 +39,7 @@ public class Address {
     @Column(nullable = false)
     private String addrDetail;
     @Column(nullable = true)
-    private String addrExtraDetail;
+        private String addrExtraDetail;
     @Column(nullable = true)
     private String addrRequest; // 배송 요청 사항
     @Column(nullable = false)
