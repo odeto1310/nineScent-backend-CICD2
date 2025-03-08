@@ -36,7 +36,7 @@ public class UserController {
         return ResponseEntity.ok(userService.checkDuplicateEmail(email));
     }
 
-    // 회원 가입 - 인증x
+    // 회원 가입
     @PostMapping("/join")
     public ResponseEntity<UserVO> join(@RequestBody UserJoinRequestDTO dto) {
         log.info("회원 가입 요청 - 사용자 ID: {}", dto.getUserId());

@@ -68,6 +68,7 @@ public class OrderHistoryService {
         dto.setOrderItemId(orderItem.getOrderItemId());
         dto.setItemName(orderItem.getItem().getItemName());
         dto.setItemId(orderItem.getItem().getItemId());
+        dto.setMainPhoto(orderItem.getItem().getMainPhoto());
         dto.setQuantity(orderItem.getQuantity());
         dto.setOriginalPrice(orderItem.getOriginalPrice());
         dto.setDiscountedPrice(orderItem.getDiscountedPrice());
