@@ -1,6 +1,8 @@
 package shop.ninescent.mall.item.service;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import shop.ninescent.mall.image.domain.ImageCategory;
@@ -8,9 +10,11 @@ import shop.ninescent.mall.image.dto.ImageRequestDTO;
 import shop.ninescent.mall.image.service.ProductImageService;
 import shop.ninescent.mall.item.domain.Item;
 import shop.ninescent.mall.item.dto.ItemDTO;
+import shop.ninescent.mall.item.dto.RecommendItem;
 import shop.ninescent.mall.item.repository.ItemRepository;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +24,7 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
     private final ProductImageService productImageService;
+    private List<RecommendItem> recommendItemsList = new ArrayList<>();
 
 
     public List<Item> getAllItems() {
@@ -90,5 +95,34 @@ public class ItemService {
 
         // 상품 삭제
         itemRepository.delete(item);
+    }
+
+    // 서버 실행 시 상품추천
+    @PostConstruct
+    public void initRecommendItems() {
+        updateRecommendItems();
+    }
+
+    // 매달 1일 추천목록 업데이트
+    @Scheduled(cron = "0 0 0 1 * ?")
+    public void updateRecommendItems() {
+        List<Item> recommendItems = itemRepository.recommendItems();
+
+        recommendItemsList = recommendItems.stream().map(item -> {
+            RecommendItem recommendItem = new RecommendItem();
+            recommendItem.setItemId(item.getItemId());
+            recommendItem.setItemName(item.getItemName());
+            recommendItem.setItemSize(item.getItemSize());
+            recommendItem.setItemTitle(item.getItemTitle());
+            recommendItem.setPrice(item.getPrice());
+            recommendItem.setDiscountRate(item.getDiscountRate());
+            recommendItem.setDiscountedPrice(item.getDiscountedPrice());
+            recommendItem.setMainPhoto(item.getMainPhoto());
+            return recommendItem;
+        }).toList();
+    }
+
+    public List<RecommendItem> recommendItemsList() {
+        return recommendItemsList;
     }
 }
