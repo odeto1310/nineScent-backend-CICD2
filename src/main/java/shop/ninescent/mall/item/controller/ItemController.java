@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import shop.ninescent.mall.item.domain.Item;
 import shop.ninescent.mall.item.dto.ItemDTO;
+import shop.ninescent.mall.item.dto.RecommendItem;
 import shop.ninescent.mall.item.service.ItemService;
 
 import java.io.IOException;
@@ -73,5 +74,10 @@ public class ItemController {
     @DeleteMapping("/{id}")
     public void deleteItem(@PathVariable("id") Long id) {
         itemService.deleteItem(id);
+    }
+
+    @GetMapping("/recommend")
+    public List<RecommendItem> getRecommendItems() {
+        return itemService.recommendItemsList();
     }
 }
