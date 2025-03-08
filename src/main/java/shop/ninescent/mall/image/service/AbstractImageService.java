@@ -12,6 +12,7 @@ import shop.ninescent.mall.image.util.FileNameUtil;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -28,19 +29,36 @@ public abstract class AbstractImageService implements ImageServiceInterface{
         this.amazonS3 = amazonS3;
     }
 
-    protected String uploadToS3(MultipartFile file, String filePath) throws IOException {
-        File convertedFile = convertMultipartFileToFile(file);
-        ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentType(file.getContentType());
+//    protected String uploadToS3(MultipartFile file, String filePath) throws IOException {
+//        File convertedFile = convertMultipartFileToFile(file);
+//        ObjectMetadata metadata = new ObjectMetadata();
+//        metadata.setContentType(file.getContentType());
+//
+//        PutObjectRequest putRequest = new PutObjectRequest(bucketName, filePath, convertedFile)
+//                .withMetadata(metadata);
+//
+//
+//        amazonS3.putObject(putRequest);
+//        convertedFile.delete();
+//        return bucketUrl + "/" + filePath;
+//    }
 
-        PutObjectRequest putRequest = new PutObjectRequest(bucketName, filePath, convertedFile)
-                .withMetadata(metadata);
+    protected String uploadToS3(MultipartFile file, String filePath) {
+        try (InputStream inputStream = file.getInputStream()) {  // ✅ InputStream 사용하여 직접 업로드
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentLength(file.getSize()); // ✅ 파일 크기 설정
+            metadata.setContentType(file.getContentType());
 
+            amazonS3.putObject(bucketName, filePath, inputStream, metadata); // ✅ S3 업로드
 
-        amazonS3.putObject(putRequest);
-        convertedFile.delete();
-        return bucketUrl + "/" + filePath;
+            // ✅ AWS SDK에서 제공하는 S3 URL 반환
+            return amazonS3.getUrl(bucketName, filePath).toString();
+
+        } catch (IOException e) {
+            throw new RuntimeException("파일 업로드 중 오류 발생", e);
+        }
     }
+
 
     protected boolean deleteFromS3(String filePath) {
         if (amazonS3.doesObjectExist(bucketName, filePath)) {
@@ -62,13 +80,13 @@ public abstract class AbstractImageService implements ImageServiceInterface{
         }
     }
 
-    private File convertMultipartFileToFile(MultipartFile file) throws IOException {
-        File convertedFile = new File(FileNameUtil.sanitizeFileName(file.getOriginalFilename()));
-        try (FileOutputStream fos = new FileOutputStream(convertedFile)) {
-            fos.write(file.getBytes());
-        }
-        return convertedFile;
-    }
+//    private File convertMultipartFileToFile(MultipartFile file) throws IOException {
+//        File convertedFile = new File(FileNameUtil.sanitizeFileName(file.getOriginalFilename()));
+//        try (FileOutputStream fos = new FileOutputStream(convertedFile)) {
+//            fos.write(file.getBytes());
+//        }
+//        return convertedFile;
+//    }
 
     protected String getNextAvailableFileName(String folderPath, String baseName) {
         int index = 1;
