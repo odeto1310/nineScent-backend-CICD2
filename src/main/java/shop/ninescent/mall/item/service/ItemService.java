@@ -2,6 +2,8 @@ package shop.ninescent.mall.item.service;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -113,8 +115,8 @@ public class ItemService {
     }
 
     // 서버 실행 시 상품추천
-    @PostConstruct
-    public void initRecommendItems() {
+    @EventListener(ApplicationReadyEvent.class)
+    public void onApplicationReady() {
         updateRecommendItems();
     }
 
