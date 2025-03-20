@@ -1,0 +1,61 @@
+name: Backend Deploy Actions CI/CD
+
+on:
+  push:
+    branches:
+    - "main"
+    - "develop"
+  pull_request:
+    branches: "main"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Create application.yml from Secrets
+        run: |
+          mkdir -p ./src/main/resources
+          echo "${{ secrets.APPLICATION_YML }}" > ./src/main/resources/application.yml
+          cat ./src/main/resources/application.yml  # 생성된 파일 내용 확인
+
+      - name: Build with Gradle
+        run: |
+          chmod +x gradlew
+          ./gradlew clean build -x test
+
+      - name: Deploy to EC2
+        env:
+          PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          HOST: ${{ secrets.EC2_HOST }}
+          USER: ec2-user
+        run: |
+          echo "$PRIVATE_KEY" > private_key.pem
+          chmod 600 private_key.pem
+
+          # JAR 파일 전송
+          scp -o StrictHostKeyChecking=no -i private_key.pem build/libs/mall-0.0.1-SNAPSHOT.jar $USER@$HOST:/home/ec2-user/app/backend.jar
+        
+          # EC2에서 기존 백엔드 종료 후 새 JAR 실행 및 application.yml 배포
+          ssh -o StrictHostKeyChecking=no -i private_key.pem $USER@$HOST << 'EOF'
+            sudo systemctl stop backend.service || true
+            sudo mv ~/backend.jar /home/ec2-user/app/backend.jar
+
+            # src/main/resources 디렉토리 확인 및 생성
+            mkdir -p /home/ec2-user/app/src/main/resources
+
+            # application.yml 파일을 GitHub Secrets에서 받은 내용으로 생성
+            echo "${APPLICATION_YML}" > /home/ec2-user/app/src/main/resources/application.yml
+            chmod 600 /home/ec2-user/app/src/main/resources/application.yml
+            
+            sudo systemctl start backend.service
+          EOF
