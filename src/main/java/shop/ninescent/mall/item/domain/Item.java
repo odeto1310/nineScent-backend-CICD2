@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,21 +17,24 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long itemId;
     @Column(nullable = false)
+    private Long categoryId;
+    @Column(nullable = true)
     private Long subCategoryId;
     @Column(nullable = false)
     private String itemName;
-    @Column(nullable = false)
-    private Integer categoryId;
     @Column(nullable = true)
     private String itemSize;
     @Column(nullable = true)
+    private String itemTitle;
+    @Column(nullable = true)
     private String itemDescription;
+
     @Column(nullable = false)
-    private Long price;
+    private BigDecimal price;
     @Column(nullable = true)
     private Integer discountRate; // 할인율
     @Column(nullable = true)
-    private Long discountedPrice;
+    private BigDecimal discountedPrice;
     @Column(nullable = true)
     private LocalDate discountStart;
     @Column(nullable = true)
@@ -40,6 +45,6 @@ public class Item {
     private int stock;
     @Column(nullable = true)
     private String mainPhoto;
-    @Column(nullable = true)
-    private String detailPhoto;
+    @ElementCollection  // ✅ 여러 개의 상세 이미지 URL을 저장할 수 있도록 설정
+    private List<String> detailPhotos;
 }

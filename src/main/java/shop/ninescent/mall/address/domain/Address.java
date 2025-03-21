@@ -27,7 +27,9 @@ public class Address {
     private User user; // User와 연관 관계
 
     @Column(nullable = false)
-    private String addrName; // 예: "집", "회사"
+    private String addrNicName; // 예: "집", "회사"
+    @Column(nullable = false)
+    private String addrName; // 예: "홍길동"
     @Column(nullable = false)
     private String addrContact;
     @Column(nullable = false)
@@ -36,6 +38,8 @@ public class Address {
     private String addrAddress;
     @Column(nullable = false)
     private String addrDetail;
+    @Column(nullable = true)
+        private String addrExtraDetail;
     @Column(nullable = true)
     private String addrRequest; // 배송 요청 사항
     @Column(nullable = false)
@@ -46,4 +50,7 @@ public class Address {
     private Boolean isExtraFee; // 배송 추가비 여부
     @Column(nullable = true)
     private LocalDateTime lastUsed; // 마지막 사용 시간
+    @Column(nullable = false)
+    @Builder.Default
+    private Boolean isDeleted = false; // 논리적 삭제 컬럼 추가
 }

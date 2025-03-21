@@ -30,6 +30,9 @@ public class QnaBoard {
     private String qnaCategory;
 
     @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false)
     private String content;
 
     private String attachment;

@@ -1,42 +1,29 @@
 package shop.ninescent.mall.order.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import shop.ninescent.mall.order.dto.OrderItemDTO;
-import shop.ninescent.mall.order.dto.OrderPrepareRequestDTO;
+import shop.ninescent.mall.order.domain.Orders;
+import shop.ninescent.mall.order.dto.OrderRequestDTO;
 import shop.ninescent.mall.order.service.OrderService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/order")
 @RequiredArgsConstructor
+@RequestMapping("/api/orders")
 public class OrderController {
     private final OrderService orderService;
 
-    @PostMapping("/prepare")
-    //주문하기 페이지로 이동 (단일 or 장바구니)
-    public ResponseEntity<?> prepareOrder(@RequestBody OrderPrepareRequestDTO request) {
-        if (request.getItemId() != null && request.getQuantity() != null) {
-            // 단일 상품 기반 주문하기 페이지
-            OrderItemDTO orderDetail = orderService.prepareSingleOrder(request.getItemId(), request.getQuantity(), request.getUserNo(), request.getAddrNo() // 선택된 주소 (없으면 default)
-            );
-            return ResponseEntity.ok(orderDetail);
-        } else if (request.getUserNo() != null) {
-            // 장바구니 기반 주문하기 페이지
-            List<OrderItemDTO> orderDetails = orderService.prepareCartOrder(request.getUserNo(), request.getAddrNo() // 선택된 주소 (없으면 default)
-            );
-            return ResponseEntity.ok(orderDetails);
-        } else {
-            return ResponseEntity.badRequest().body("Invalidd request. ");
+    @PostMapping
+    public ResponseEntity<?> createOrder(@RequestBody OrderRequestDTO orderRequest) {
+        try {
+            Orders order = orderService.createOrder(orderRequest);
+            return ResponseEntity.ok(order);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("주문 저장 실패: " + e.getMessage());
         }
     }
 
-    // 주문 취소 (로그 기반 재고 복원)
-    @PostMapping("/cancel")
-    public ResponseEntity<String> cancelOrder(@RequestParam Long logId) {
-        orderService.cancelStockLog(logId);
-        return ResponseEntity.ok("Order canceled and stock restored successfully.");
-    }
 }

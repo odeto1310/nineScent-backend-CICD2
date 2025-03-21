@@ -57,7 +57,7 @@ public class CartController {
     public ResponseEntity<String> updateItem(@PathVariable Long userNo, @RequestBody CartItemDTO cartItemDTO) {
         try {
             // 수량을 증가, 감소, 직접 지정하는 로직 처리
-            cartItemService.updateCartItem(userNo, cartItemDTO.getCartItemId(), cartItemDTO.getQuantity(), cartItemDTO.getAction());
+            cartItemService.updateCartItem(userNo, cartItemDTO.getItemId(), cartItemDTO.getQuantity(), cartItemDTO.getAction());
             return ResponseEntity.ok("Item updated");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

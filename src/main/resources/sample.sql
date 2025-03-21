@@ -235,4 +235,9 @@ VALUES
     ('서울 물류센터', '02-1234-5678', '04524', '서울특별시 중구 세종대로 110', 'A동 2층'),
     ('부산 물류센터', '051-9876-5432', '48941', '부산광역시 중구 중앙대로 26', 'B동 3층');
 
+USE ninescent;
 SELECT * FROM users;
+SELECT * FROM orders;
+SELECT * FROM order_items;
+SELECT * FROM cart_item;
+SELECT * FROM address;

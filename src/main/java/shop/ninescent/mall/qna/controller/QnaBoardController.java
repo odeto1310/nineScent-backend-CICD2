@@ -1,6 +1,9 @@
 package shop.ninescent.mall.qna.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.ninescent.mall.qna.dto.QnaRequestDTO;
@@ -33,6 +36,17 @@ public class QnaBoardController {
     public ResponseEntity<List<QnaResponseDTO>> findQnaByUserNo(@PathVariable Long userNo) {
         List<QnaResponseDTO> responseDTOList = qnaService.findQnaByUserNo(userNo);
         return ResponseEntity.ok(responseDTOList);
+    }
+
+    @GetMapping("/{questionId}")
+    public ResponseEntity<QnaResponseDTO> findQnaByQuestionId(@PathVariable Long questionId) {
+        qnaService.findById(questionId);
+        return ResponseEntity.ok(qnaService.findById(questionId));
+    }
+
+    @GetMapping("/list/{itemId}")
+    public Page<QnaResponseDTO> findQnaByItemId(@PathVariable Long itemId, @PageableDefault(size = 5) Pageable pageable) {
+        return qnaService.findQnaByPage(itemId, pageable);
     }
 
     @PutMapping("/{questionId}")

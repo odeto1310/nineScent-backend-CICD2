@@ -11,6 +11,8 @@ public class UpdateQnaRequestDTO {
 
     private String qnaCategory;
 
+    private String title;
+
     private String content;
 
     private String attachment;

@@ -1,7 +1,11 @@
 package shop.ninescent.mall.cartItem.service;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import shop.ninescent.mall.cartItem.domain.Cart;
 import shop.ninescent.mall.cartItem.domain.CartItem;
 import shop.ninescent.mall.cartItem.repository.CartItemRepository;
@@ -15,9 +19,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CartItemService {
 
+    private static final Logger log = LoggerFactory.getLogger(CartItemService.class);
     private final CartItemRepository cartItemRepository;
     private final CartService cartService;
     private final ItemRepository itemRepository;
+    private final EntityManager entityManager; // 추가 -- 일부 경우 트랜잭션 커밋 전에 Hibernate가 delete 쿼리를 실행하지 않는 문제가 발생
 
 //    // 장바구니 조회
 //    public List<CartItem> getAllItems(Long userNo) {
@@ -33,8 +39,11 @@ public class CartItemService {
 
         CartItem existingCartItem = cartItemRepository.findByCartAndItem(cart, item);
         if (existingCartItem != null) {
+            System.out.println("****************************Item already exists: " + existingCartItem);
             existingCartItem.setQuantity(existingCartItem.getQuantity() + quantity);
+            cartItemRepository.save(existingCartItem);
         } else {
+            System.out.println("****************************Item not found: " + item);
             CartItem cartItem = new CartItem();
             cartItem.setCart(cart);
             cartItem.setItem(item);
@@ -97,17 +106,22 @@ public class CartItemService {
     }
 
     // 특정 아이템 삭제
+    @Transactional
     public void removeItemFromCart(Long userNo, Long itemId) {
         Cart cart = cartService.getOrCreateCartByUserNo(userNo);
 
-        Item item = itemRepository.findById(itemId).orElseThrow(() -> new IllegalArgumentException("Item not found: " + itemId));
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new IllegalArgumentException("Item not found: " + itemId));
 
         CartItem cartItem = cartItemRepository.findByCartAndItem(cart, item);
-        if (cartItem == null) {
-            throw new IllegalArgumentException("Item not found in cart");
-        }
 
-        cartItemRepository.delete(cartItem);
-        updateCartTotalCount(cart);
+        if (cartItem != null) {
+            System.out.println("🛑 Deleting item from cart: " + itemId);
+            cartItemRepository.delete(cartItem);
+            entityManager.flush(); // ✅ 강제 반영
+            updateCartTotalCount(cart);
+        } else {
+            System.out.println("⚠ Item not found in cart: " + itemId);
+        }
     }
 }

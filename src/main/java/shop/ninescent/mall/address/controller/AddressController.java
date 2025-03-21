@@ -37,8 +37,15 @@ public class AddressController {
     // 사용자 모든 주소 가져오기
     @GetMapping("/list/{userNo}")
     public ResponseEntity<List<AddressDTO>> getAllAddresses(@PathVariable Long userNo) {
-        List<AddressDTO> addresses = addressService.getAddresses(userNo);
+        List<AddressDTO> addresses = addressService.getAllAddresses(userNo);
         return ResponseEntity.ok(addresses);
+    }
+    // 특정 주소 가져오기
+    @GetMapping("/{addrNo}")
+    public ResponseEntity<AddressDTO> getAllAddress(@PathVariable Long addrNo) {
+        Address selectedAddress = addressService.getAddress(addrNo);
+        AddressDTO addressDTO = addressService.convertToDTO(selectedAddress);
+        return ResponseEntity.ok(addressDTO);
     }
     // 주소 수정
     @PutMapping("update/{addrNo}")
@@ -54,17 +61,17 @@ public class AddressController {
         return ResponseEntity.ok("Address deleted successfully");
     }
 
-    // isLiked 값 변경
-    @PutMapping("/like/{addrNo}")
-    public ResponseEntity<String> likeAddress(@PathVariable Long addrNo) {
-        addressService.setLikedAddress(addrNo);
-        return ResponseEntity.ok("Address like successfully");
-    }
-
-    // isDefault 값 변경
-    @PutMapping("default/{addrNo}")
-    public ResponseEntity<String> defaultAddress(@PathVariable Long addrNo, @RequestParam Long userNo) {
-        addressService.setDefaultAddress(addrNo, userNo);
-        return ResponseEntity.ok("Default address successfully");
-    }
+//    // isLiked 값 변경
+//    @PutMapping("/like/{addrNo}")
+//    public ResponseEntity<String> likeAddress(@PathVariable Long addrNo) {
+//        addressService.setLikedAddress(addrNo);
+//        return ResponseEntity.ok("Address like successfully");
+//    }
+//
+//    // isDefault 값 변경
+//    @PutMapping("default/{addrNo}")
+//    public ResponseEntity<String> defaultAddress(@PathVariable Long addrNo, @RequestParam Long userNo) {
+//        addressService.setDefaultAddress(addrNo, userNo);
+//        return ResponseEntity.ok("Default address successfully");
+//    }
 }

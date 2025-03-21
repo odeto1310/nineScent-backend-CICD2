@@ -34,9 +34,21 @@ public class CartService {
     // 사용자의 카트 정보 반환
     public CartDTO getCartByUserNo(Long userNo) {
         Cart cart = getOrCreateCartByUserNo(userNo);
-
-        List<CartItemDTO> cartItems = cart.getCartItems().stream().map(cartItem -> new CartItemDTO(cartItem.getCartItemId(), cartItem.getItem().getItemId(), cartItem.getItem().getItemName(), cartItem.getQuantity(), cartItem.getIsSelected(), null // Action은 필요하지 않음
-        )).collect(Collectors.toList());
+        List<CartItemDTO> cartItems = cart.getCartItems().stream()
+                .map(cartItem -> new CartItemDTO(
+                        cartItem.getCartItemId(),
+                        cartItem.getItem().getItemId(),
+                        cartItem.getItem().getItemName(),
+                        cartItem.getQuantity(),
+                        cartItem.getItem().getStock(),
+                        cartItem.getIsSelected(),
+                        null, // Action 필요 없음
+                        cartItem.getItem().getPrice(), // 가격 추가
+                        cartItem.getItem().getItemDescription(), // 설명 추가
+                        cartItem.getItem().getMainPhoto(), // 대표 이미지 추가
+                        cartItem.getItem().getItemSize()
+                ))
+                .collect(Collectors.toList());
 
         return new CartDTO(cart.getCartId(), cartItems);
     }

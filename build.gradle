@@ -24,6 +24,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.security:spring-security-config'
 
+	// S3
+	//	implementation 'software.amazon.awssdk:s3:2.30.11'
+	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.780'
+	
 	// OAuth2 & JWT
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-authorization-server'

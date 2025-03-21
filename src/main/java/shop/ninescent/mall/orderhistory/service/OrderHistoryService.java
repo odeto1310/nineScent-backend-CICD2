@@ -1,21 +1,19 @@
 package shop.ninescent.mall.orderhistory.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import shop.ninescent.mall.address.domain.Address;
-import shop.ninescent.mall.address.repository.AddressRepository;
-import shop.ninescent.mall.item.domain.Item;
-import shop.ninescent.mall.item.repository.ItemRepository;
-import shop.ninescent.mall.member.domain.User;
-import shop.ninescent.mall.member.repository.UserRepository;
 import shop.ninescent.mall.order.domain.OrderItems;
 import shop.ninescent.mall.order.domain.Orders;
 import shop.ninescent.mall.order.dto.OrderItemDTO;
-import shop.ninescent.mall.order.repository.OrderItemRepository;
 import shop.ninescent.mall.order.repository.OrderRepository;
 import shop.ninescent.mall.orderhistory.dto.OrderHistoryDTO;
+import shop.ninescent.mall.orderhistory.dto.OrderSummaryDTO;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,46 +21,73 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class OrderHistoryService {
     private final OrderRepository orderRepository;
-    private final OrderItemRepository orderItemRepository;
-    private final UserRepository userRepository;
 
-    public List<OrderHistoryDTO> getOrderHistory(Long userNo) {
-        // Retrieve all orders for the user (adjustable for date filtering)
-        List<Orders> userOrders = orderRepository.findByUserUserNo(userNo);
+    // 주문 상태별 개수 조회 (최근 1개월 내)
+    public OrderSummaryDTO getOrderSummary(Long userNo) {
+        LocalDateTime oneMonthAgo = LocalDateTime.now().minusMonths(1);
 
-        return userOrders.stream().map(order -> {
-            // Retrieve the items associated with the order
-            List<OrderItems> orderItems = orderItemRepository.findByOrderOrderId(order.getOrderId());
+        long pendingPayment = orderRepository.countByUser_UserNoAndPaymentDoneFalseAndOrderDateAfter(userNo, oneMonthAgo);
+        long preparingDelivery = orderRepository.countByUser_UserNoAndDeliveryDoneFalseAndPaymentDoneTrueAndOrderDateAfter(userNo, oneMonthAgo);
+//        long shipping = orderRepository.countByUser_UserNoAndDeliveryDoneFalseAndOrderDateAfter(userNo, oneMonthAgo);
+        long delivered = orderRepository.countByUser_UserNoAndDeliveryDoneTrueAndOrderDateAfter(userNo, oneMonthAgo);
+        long canceled = orderRepository.countByUser_UserNoAndRefundChangeDoneTrueAndOrderDateAfter(userNo, oneMonthAgo);
 
-            // Map order items to DTOs
-            List<OrderItemDTO> itemDTOs = orderItems.stream().map(orderItem -> {
-                Item item = orderItem.getItem(); // Ensure OrderItems is linked to Item via ManyToOne
-                Address address = order.getAddress(); // Ensure Orders is linked to Address via ManyToOne
-                User user = order.getUser();
+        return new OrderSummaryDTO(pendingPayment, preparingDelivery, delivered, canceled);
+    }
 
-                return new OrderItemDTO(
-                        item.getItemId(),
-                        item.getItemName(),
-                        orderItem.getQuantity(),
-                        item.getPrice(),
-                        item.getDiscountedPrice(),
-                        user.getUserNo(),
-                        user.getName(),
-                        address.getAddrNo(),
-                        address.getAddrDetail(),
-                        address.getIsExtraFee() ? 5000L : 0L
-                );
-            }).collect(Collectors.toList());
+    // 최근 1개월 내 주문 내역 조회
+    public List<OrderHistoryDTO> getRecentOrders(Long userNo) {
+        LocalDateTime oneMonthAgo = LocalDateTime.now().minusMonths(1);
+        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "orderId"));
+        List<Orders> orders = orderRepository.findByUser_UserNoAndOrderDateAfter(userNo, oneMonthAgo, pageRequest);
+        return orders.stream().map(this::convertToDto).collect(Collectors.toList());
+    }
 
-            // Return an OrderHistoryDTO for each order
-            return new OrderHistoryDTO(
-                    order.getOrderId(),
-                    order.getOrderDate(),
-                    order.isDeliveryDone(),
-                    order.isPaymentDone(),
-                    order.isRefundChangeDone(),
-                    itemDTOs
-            );
-        }).collect(Collectors.toList());
+    // 전체 주문 내역 조회 (페이징 적용)
+    public Page<OrderHistoryDTO> getAllOrders(Long userNo, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Orders> orderPage = orderRepository.findByUser_UserNo_OrderByOrderIdDesc(userNo, pageable);
+
+        return orderPage.map(this::convertToDto);
+    }
+
+    // 주문 엔티티를 DTO로 변환
+    private OrderHistoryDTO convertToDto(Orders order) {
+        OrderHistoryDTO dto = new OrderHistoryDTO();
+        dto.setOrderId(order.getOrderId());
+        dto.setOrderDate(order.getOrderDate());
+        dto.setOrderStatus(determineOrderStatus(order));
+        dto.setFinalAmount(order.getFinalAmount());
+        dto.setShippingFee(order.getShippingFee());
+        dto.setOrderItems(order.getOrderItems().stream().map(this::convertItemToDto).collect(Collectors.toList()));
+        return dto;
+    }
+
+    private OrderItemDTO convertItemToDto(OrderItems orderItem) {
+        OrderItemDTO dto = new OrderItemDTO();
+        dto.setOrderItemId(orderItem.getOrderItemId());
+        dto.setItemName(orderItem.getItem().getItemName());
+        dto.setItemId(orderItem.getItem().getItemId());
+        dto.setMainPhoto(orderItem.getItem().getMainPhoto());
+        dto.setQuantity(orderItem.getQuantity());
+        dto.setOriginalPrice(orderItem.getOriginalPrice());
+        dto.setDiscountedPrice(orderItem.getDiscountedPrice());
+        return dto;
+    }
+
+    // 주문 상태 결정 로직 (비즈니스 로직에 맞게 수정 가능)
+    private String determineOrderStatus(Orders order) {
+        if (!order.isPaymentDone()) return "입금대기중";
+        if (order.isPaymentDone() && !order.isDeliveryDone()) return "배송준비중";
+//        if (order.isPaymentDone() && !order.isDeliveryDone()) return "배송중";
+        if (order.isPaymentDone() && order.isDeliveryDone()) return "배송완료";
+        if (order.isRefundChangeDone()) return "취소/반품/교환";
+        return "구매확정";
+    }
+
+    // 주문 내역 상세보기
+    public Orders getOrderDetail(Long orderId) {
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("주문 정보 없음"));
     }
 }
